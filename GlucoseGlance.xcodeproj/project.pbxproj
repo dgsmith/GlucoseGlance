@@ -1,0 +1,814 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 50;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		56A3DD152650651400C7A3E4 /* GlucoseGlance WatchKit App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 56A3DD142650651400C7A3E4 /* GlucoseGlance WatchKit App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		56A3DD1A2650651800C7A3E4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56A3DD192650651800C7A3E4 /* Assets.xcassets */; };
+		56A3DD212650651800C7A3E4 /* GlucoseGlance WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 56A3DD202650651800C7A3E4 /* GlucoseGlance WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		56A3DD262650651800C7A3E4 /* GlucoseGlanceApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56A3DD252650651800C7A3E4 /* GlucoseGlanceApp.swift */; };
+		56A3DD282650651800C7A3E4 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56A3DD272650651800C7A3E4 /* ContentView.swift */; };
+		56A3DD2A2650651800C7A3E4 /* NotificationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56A3DD292650651800C7A3E4 /* NotificationController.swift */; };
+		56A3DD2C2650651800C7A3E4 /* NotificationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56A3DD2B2650651800C7A3E4 /* NotificationView.swift */; };
+		56A3DD2E2650651800C7A3E4 /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56A3DD2D2650651800C7A3E4 /* ComplicationController.swift */; };
+		56A3DD302650651900C7A3E4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56A3DD2F2650651900C7A3E4 /* Assets.xcassets */; };
+		56A3DD332650651900C7A3E4 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56A3DD322650651900C7A3E4 /* Preview Assets.xcassets */; };
+		56A3DD3F2650651A00C7A3E4 /* GlucoseGlanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56A3DD3E2650651A00C7A3E4 /* GlucoseGlanceTests.swift */; };
+		56A3DD4A2650651A00C7A3E4 /* GlucoseGlanceUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56A3DD492650651A00C7A3E4 /* GlucoseGlanceUITests.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		56A3DD162650651400C7A3E4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 56A3DD0A2650651400C7A3E4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 56A3DD132650651400C7A3E4;
+			remoteInfo = "GlucoseGlance WatchKit App";
+		};
+		56A3DD222650651800C7A3E4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 56A3DD0A2650651400C7A3E4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 56A3DD1F2650651800C7A3E4;
+			remoteInfo = "GlucoseGlance WatchKit Extension";
+		};
+		56A3DD3B2650651900C7A3E4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 56A3DD0A2650651400C7A3E4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 56A3DD1F2650651800C7A3E4;
+			remoteInfo = "GlucoseGlance WatchKit Extension";
+		};
+		56A3DD462650651A00C7A3E4 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = 56A3DD0A2650651400C7A3E4 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 56A3DD132650651400C7A3E4;
+			remoteInfo = "GlucoseGlance WatchKit App";
+		};
+/* End PBXContainerItemProxy section */
+
+/* Begin PBXCopyFilesBuildPhase section */
+		56A3DD512650651A00C7A3E4 /* Embed App Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				56A3DD212650651800C7A3E4 /* GlucoseGlance WatchKit Extension.appex in Embed App Extensions */,
+			);
+			name = "Embed App Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		56A3DD552650651A00C7A3E4 /* Embed Watch Content */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "$(CONTENTS_FOLDER_PATH)/Watch";
+			dstSubfolderSpec = 16;
+			files = (
+				56A3DD152650651400C7A3E4 /* GlucoseGlance WatchKit App.app in Embed Watch Content */,
+			);
+			name = "Embed Watch Content";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXCopyFilesBuildPhase section */
+
+/* Begin PBXFileReference section */
+		56A3DD102650651400C7A3E4 /* GlucoseGlance.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GlucoseGlance.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		56A3DD142650651400C7A3E4 /* GlucoseGlance WatchKit App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "GlucoseGlance WatchKit App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
+		56A3DD192650651800C7A3E4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		56A3DD1B2650651800C7A3E4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		56A3DD202650651800C7A3E4 /* GlucoseGlance WatchKit Extension.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = "GlucoseGlance WatchKit Extension.appex"; sourceTree = BUILT_PRODUCTS_DIR; };
+		56A3DD252650651800C7A3E4 /* GlucoseGlanceApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlucoseGlanceApp.swift; sourceTree = "<group>"; };
+		56A3DD272650651800C7A3E4 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		56A3DD292650651800C7A3E4 /* NotificationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationController.swift; sourceTree = "<group>"; };
+		56A3DD2B2650651800C7A3E4 /* NotificationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NotificationView.swift; sourceTree = "<group>"; };
+		56A3DD2D2650651800C7A3E4 /* ComplicationController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ComplicationController.swift; sourceTree = "<group>"; };
+		56A3DD2F2650651900C7A3E4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		56A3DD322650651900C7A3E4 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
+		56A3DD342650651900C7A3E4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		56A3DD352650651900C7A3E4 /* PushNotificationPayload.apns */ = {isa = PBXFileReference; lastKnownFileType = text; path = PushNotificationPayload.apns; sourceTree = "<group>"; };
+		56A3DD3A2650651900C7A3E4 /* GlucoseGlanceTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GlucoseGlanceTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		56A3DD3E2650651A00C7A3E4 /* GlucoseGlanceTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlucoseGlanceTests.swift; sourceTree = "<group>"; };
+		56A3DD402650651A00C7A3E4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		56A3DD452650651A00C7A3E4 /* GlucoseGlanceUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GlucoseGlanceUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
+		56A3DD492650651A00C7A3E4 /* GlucoseGlanceUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlucoseGlanceUITests.swift; sourceTree = "<group>"; };
+		56A3DD4B2650651A00C7A3E4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		56A3DD1D2650651800C7A3E4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		56A3DD372650651900C7A3E4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		56A3DD422650651A00C7A3E4 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		56A3DD092650651400C7A3E4 = {
+			isa = PBXGroup;
+			children = (
+				56A3DD182650651400C7A3E4 /* GlucoseGlance WatchKit App */,
+				56A3DD242650651800C7A3E4 /* GlucoseGlance WatchKit Extension */,
+				56A3DD3D2650651A00C7A3E4 /* GlucoseGlanceTests */,
+				56A3DD482650651A00C7A3E4 /* GlucoseGlanceUITests */,
+				56A3DD112650651400C7A3E4 /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		56A3DD112650651400C7A3E4 /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				56A3DD102650651400C7A3E4 /* GlucoseGlance.app */,
+				56A3DD142650651400C7A3E4 /* GlucoseGlance WatchKit App.app */,
+				56A3DD202650651800C7A3E4 /* GlucoseGlance WatchKit Extension.appex */,
+				56A3DD3A2650651900C7A3E4 /* GlucoseGlanceTests.xctest */,
+				56A3DD452650651A00C7A3E4 /* GlucoseGlanceUITests.xctest */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		56A3DD182650651400C7A3E4 /* GlucoseGlance WatchKit App */ = {
+			isa = PBXGroup;
+			children = (
+				56A3DD192650651800C7A3E4 /* Assets.xcassets */,
+				56A3DD1B2650651800C7A3E4 /* Info.plist */,
+			);
+			path = "GlucoseGlance WatchKit App";
+			sourceTree = "<group>";
+		};
+		56A3DD242650651800C7A3E4 /* GlucoseGlance WatchKit Extension */ = {
+			isa = PBXGroup;
+			children = (
+				56A3DD252650651800C7A3E4 /* GlucoseGlanceApp.swift */,
+				56A3DD272650651800C7A3E4 /* ContentView.swift */,
+				56A3DD292650651800C7A3E4 /* NotificationController.swift */,
+				56A3DD2B2650651800C7A3E4 /* NotificationView.swift */,
+				56A3DD2D2650651800C7A3E4 /* ComplicationController.swift */,
+				56A3DD2F2650651900C7A3E4 /* Assets.xcassets */,
+				56A3DD342650651900C7A3E4 /* Info.plist */,
+				56A3DD352650651900C7A3E4 /* PushNotificationPayload.apns */,
+				56A3DD312650651900C7A3E4 /* Preview Content */,
+			);
+			path = "GlucoseGlance WatchKit Extension";
+			sourceTree = "<group>";
+		};
+		56A3DD312650651900C7A3E4 /* Preview Content */ = {
+			isa = PBXGroup;
+			children = (
+				56A3DD322650651900C7A3E4 /* Preview Assets.xcassets */,
+			);
+			path = "Preview Content";
+			sourceTree = "<group>";
+		};
+		56A3DD3D2650651A00C7A3E4 /* GlucoseGlanceTests */ = {
+			isa = PBXGroup;
+			children = (
+				56A3DD3E2650651A00C7A3E4 /* GlucoseGlanceTests.swift */,
+				56A3DD402650651A00C7A3E4 /* Info.plist */,
+			);
+			path = GlucoseGlanceTests;
+			sourceTree = "<group>";
+		};
+		56A3DD482650651A00C7A3E4 /* GlucoseGlanceUITests */ = {
+			isa = PBXGroup;
+			children = (
+				56A3DD492650651A00C7A3E4 /* GlucoseGlanceUITests.swift */,
+				56A3DD4B2650651A00C7A3E4 /* Info.plist */,
+			);
+			path = GlucoseGlanceUITests;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		56A3DD0F2650651400C7A3E4 /* GlucoseGlance */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 56A3DD562650651A00C7A3E4 /* Build configuration list for PBXNativeTarget "GlucoseGlance" */;
+			buildPhases = (
+				56A3DD0E2650651400C7A3E4 /* Resources */,
+				56A3DD552650651A00C7A3E4 /* Embed Watch Content */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				56A3DD172650651400C7A3E4 /* PBXTargetDependency */,
+			);
+			name = GlucoseGlance;
+			productName = GlucoseGlance;
+			productReference = 56A3DD102650651400C7A3E4 /* GlucoseGlance.app */;
+			productType = "com.apple.product-type.application.watchapp2-container";
+		};
+		56A3DD132650651400C7A3E4 /* GlucoseGlance WatchKit App */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 56A3DD522650651A00C7A3E4 /* Build configuration list for PBXNativeTarget "GlucoseGlance WatchKit App" */;
+			buildPhases = (
+				56A3DD122650651400C7A3E4 /* Resources */,
+				56A3DD512650651A00C7A3E4 /* Embed App Extensions */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				56A3DD232650651800C7A3E4 /* PBXTargetDependency */,
+			);
+			name = "GlucoseGlance WatchKit App";
+			productName = "GlucoseGlance WatchKit App";
+			productReference = 56A3DD142650651400C7A3E4 /* GlucoseGlance WatchKit App.app */;
+			productType = "com.apple.product-type.application.watchapp2";
+		};
+		56A3DD1F2650651800C7A3E4 /* GlucoseGlance WatchKit Extension */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 56A3DD4E2650651A00C7A3E4 /* Build configuration list for PBXNativeTarget "GlucoseGlance WatchKit Extension" */;
+			buildPhases = (
+				56A3DD1C2650651800C7A3E4 /* Sources */,
+				56A3DD1D2650651800C7A3E4 /* Frameworks */,
+				56A3DD1E2650651800C7A3E4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = "GlucoseGlance WatchKit Extension";
+			productName = "GlucoseGlance WatchKit Extension";
+			productReference = 56A3DD202650651800C7A3E4 /* GlucoseGlance WatchKit Extension.appex */;
+			productType = "com.apple.product-type.watchkit2-extension";
+		};
+		56A3DD392650651900C7A3E4 /* GlucoseGlanceTests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 56A3DD592650651A00C7A3E4 /* Build configuration list for PBXNativeTarget "GlucoseGlanceTests" */;
+			buildPhases = (
+				56A3DD362650651900C7A3E4 /* Sources */,
+				56A3DD372650651900C7A3E4 /* Frameworks */,
+				56A3DD382650651900C7A3E4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				56A3DD3C2650651900C7A3E4 /* PBXTargetDependency */,
+			);
+			name = GlucoseGlanceTests;
+			productName = GlucoseGlanceTests;
+			productReference = 56A3DD3A2650651900C7A3E4 /* GlucoseGlanceTests.xctest */;
+			productType = "com.apple.product-type.bundle.unit-test";
+		};
+		56A3DD442650651A00C7A3E4 /* GlucoseGlanceUITests */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 56A3DD5C2650651A00C7A3E4 /* Build configuration list for PBXNativeTarget "GlucoseGlanceUITests" */;
+			buildPhases = (
+				56A3DD412650651A00C7A3E4 /* Sources */,
+				56A3DD422650651A00C7A3E4 /* Frameworks */,
+				56A3DD432650651A00C7A3E4 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				56A3DD472650651A00C7A3E4 /* PBXTargetDependency */,
+			);
+			name = GlucoseGlanceUITests;
+			productName = GlucoseGlanceUITests;
+			productReference = 56A3DD452650651A00C7A3E4 /* GlucoseGlanceUITests.xctest */;
+			productType = "com.apple.product-type.bundle.ui-testing";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		56A3DD0A2650651400C7A3E4 /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				LastSwiftUpdateCheck = 1250;
+				LastUpgradeCheck = 1250;
+				TargetAttributes = {
+					56A3DD0F2650651400C7A3E4 = {
+						CreatedOnToolsVersion = 12.5;
+					};
+					56A3DD132650651400C7A3E4 = {
+						CreatedOnToolsVersion = 12.5;
+					};
+					56A3DD1F2650651800C7A3E4 = {
+						CreatedOnToolsVersion = 12.5;
+					};
+					56A3DD392650651900C7A3E4 = {
+						CreatedOnToolsVersion = 12.5;
+						TestTargetID = 56A3DD1F2650651800C7A3E4;
+					};
+					56A3DD442650651A00C7A3E4 = {
+						CreatedOnToolsVersion = 12.5;
+						TestTargetID = 56A3DD132650651400C7A3E4;
+					};
+				};
+			};
+			buildConfigurationList = 56A3DD0D2650651400C7A3E4 /* Build configuration list for PBXProject "GlucoseGlance" */;
+			compatibilityVersion = "Xcode 9.3";
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 56A3DD092650651400C7A3E4;
+			productRefGroup = 56A3DD112650651400C7A3E4 /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				56A3DD0F2650651400C7A3E4 /* GlucoseGlance */,
+				56A3DD132650651400C7A3E4 /* GlucoseGlance WatchKit App */,
+				56A3DD1F2650651800C7A3E4 /* GlucoseGlance WatchKit Extension */,
+				56A3DD392650651900C7A3E4 /* GlucoseGlanceTests */,
+				56A3DD442650651A00C7A3E4 /* GlucoseGlanceUITests */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		56A3DD0E2650651400C7A3E4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		56A3DD122650651400C7A3E4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				56A3DD1A2650651800C7A3E4 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		56A3DD1E2650651800C7A3E4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				56A3DD332650651900C7A3E4 /* Preview Assets.xcassets in Resources */,
+				56A3DD302650651900C7A3E4 /* Assets.xcassets in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		56A3DD382650651900C7A3E4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		56A3DD432650651A00C7A3E4 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		56A3DD1C2650651800C7A3E4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				56A3DD2A2650651800C7A3E4 /* NotificationController.swift in Sources */,
+				56A3DD282650651800C7A3E4 /* ContentView.swift in Sources */,
+				56A3DD2E2650651800C7A3E4 /* ComplicationController.swift in Sources */,
+				56A3DD262650651800C7A3E4 /* GlucoseGlanceApp.swift in Sources */,
+				56A3DD2C2650651800C7A3E4 /* NotificationView.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		56A3DD362650651900C7A3E4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				56A3DD3F2650651A00C7A3E4 /* GlucoseGlanceTests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		56A3DD412650651A00C7A3E4 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				56A3DD4A2650651A00C7A3E4 /* GlucoseGlanceUITests.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		56A3DD172650651400C7A3E4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 56A3DD132650651400C7A3E4 /* GlucoseGlance WatchKit App */;
+			targetProxy = 56A3DD162650651400C7A3E4 /* PBXContainerItemProxy */;
+		};
+		56A3DD232650651800C7A3E4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 56A3DD1F2650651800C7A3E4 /* GlucoseGlance WatchKit Extension */;
+			targetProxy = 56A3DD222650651800C7A3E4 /* PBXContainerItemProxy */;
+		};
+		56A3DD3C2650651900C7A3E4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 56A3DD1F2650651800C7A3E4 /* GlucoseGlance WatchKit Extension */;
+			targetProxy = 56A3DD3B2650651900C7A3E4 /* PBXContainerItemProxy */;
+		};
+		56A3DD472650651A00C7A3E4 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = 56A3DD132650651400C7A3E4 /* GlucoseGlance WatchKit App */;
+			targetProxy = 56A3DD462650651A00C7A3E4 /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
+
+/* Begin XCBuildConfiguration section */
+		56A3DD4C2650651A00C7A3E4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		56A3DD4D2650651A00C7A3E4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++14";
+				CLANG_CXX_LIBRARY = "libc++";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu11;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+		56A3DD4F2650651A00C7A3E4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"GlucoseGlance WatchKit Extension/Preview Content\"";
+				DEVELOPMENT_TEAM = Z6T84878UQ;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = "GlucoseGlance WatchKit Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = me.graysonsmith.GlucoseGlance.watchkitapp.watchkitextension;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 7.4;
+			};
+			name = Debug;
+		};
+		56A3DD502650651A00C7A3E4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_COMPLICATION_NAME = Complication;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_ASSET_PATHS = "\"GlucoseGlance WatchKit Extension/Preview Content\"";
+				DEVELOPMENT_TEAM = Z6T84878UQ;
+				ENABLE_PREVIEWS = YES;
+				INFOPLIST_FILE = "GlucoseGlance WatchKit Extension/Info.plist";
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = me.graysonsmith.GlucoseGlance.watchkitapp.watchkitextension;
+				PRODUCT_NAME = "${TARGET_NAME}";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 7.4;
+			};
+			name = Release;
+		};
+		56A3DD532650651A00C7A3E4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = Z6T84878UQ;
+				IBSC_MODULE = GlucoseGlance_WatchKit_Extension;
+				INFOPLIST_FILE = "GlucoseGlance WatchKit App/Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = me.graysonsmith.GlucoseGlance.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 7.4;
+			};
+			name = Debug;
+		};
+		56A3DD542650651A00C7A3E4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = Z6T84878UQ;
+				IBSC_MODULE = GlucoseGlance_WatchKit_Extension;
+				INFOPLIST_FILE = "GlucoseGlance WatchKit App/Info.plist";
+				PRODUCT_BUNDLE_IDENTIFIER = me.graysonsmith.GlucoseGlance.watchkitapp;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SKIP_INSTALL = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				WATCHOS_DEPLOYMENT_TARGET = 7.4;
+			};
+			name = Release;
+		};
+		56A3DD572650651A00C7A3E4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Z6T84878UQ;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = me.graysonsmith.GlucoseGlance;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Debug;
+		};
+		56A3DD582650651A00C7A3E4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = Z6T84878UQ;
+				MARKETING_VERSION = 1.0;
+				PRODUCT_BUNDLE_IDENTIFIER = me.graysonsmith.GlucoseGlance;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SWIFT_VERSION = 5.0;
+			};
+			name = Release;
+		};
+		56A3DD5A2650651A00C7A3E4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = Z6T84878UQ;
+				INFOPLIST_FILE = GlucoseGlanceTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = me.graysonsmith.GlucoseGlanceTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GlucoseGlance WatchKit Extension.appex/GlucoseGlance WatchKit Extension";
+				WATCHOS_DEPLOYMENT_TARGET = 7.4;
+			};
+			name = Debug;
+		};
+		56A3DD5B2650651A00C7A3E4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
+				BUNDLE_LOADER = "$(TEST_HOST)";
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = Z6T84878UQ;
+				INFOPLIST_FILE = GlucoseGlanceTests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = me.graysonsmith.GlucoseGlanceTests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GlucoseGlance WatchKit Extension.appex/GlucoseGlance WatchKit Extension";
+				WATCHOS_DEPLOYMENT_TARGET = 7.4;
+			};
+			name = Release;
+		};
+		56A3DD5D2650651A00C7A3E4 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = Z6T84878UQ;
+				INFOPLIST_FILE = GlucoseGlanceUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = me.graysonsmith.GlucoseGlanceUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = "GlucoseGlance WatchKit App";
+				WATCHOS_DEPLOYMENT_TARGET = 7.4;
+			};
+			name = Debug;
+		};
+		56A3DD5E2650651A00C7A3E4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				CODE_SIGN_STYLE = Automatic;
+				DEVELOPMENT_TEAM = Z6T84878UQ;
+				INFOPLIST_FILE = GlucoseGlanceUITests/Info.plist;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@loader_path/Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = me.graysonsmith.GlucoseGlanceUITests;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SDKROOT = watchos;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 4;
+				TEST_TARGET_NAME = "GlucoseGlance WatchKit App";
+				WATCHOS_DEPLOYMENT_TARGET = 7.4;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		56A3DD0D2650651400C7A3E4 /* Build configuration list for PBXProject "GlucoseGlance" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				56A3DD4C2650651A00C7A3E4 /* Debug */,
+				56A3DD4D2650651A00C7A3E4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		56A3DD4E2650651A00C7A3E4 /* Build configuration list for PBXNativeTarget "GlucoseGlance WatchKit Extension" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				56A3DD4F2650651A00C7A3E4 /* Debug */,
+				56A3DD502650651A00C7A3E4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		56A3DD522650651A00C7A3E4 /* Build configuration list for PBXNativeTarget "GlucoseGlance WatchKit App" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				56A3DD532650651A00C7A3E4 /* Debug */,
+				56A3DD542650651A00C7A3E4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		56A3DD562650651A00C7A3E4 /* Build configuration list for PBXNativeTarget "GlucoseGlance" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				56A3DD572650651A00C7A3E4 /* Debug */,
+				56A3DD582650651A00C7A3E4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		56A3DD592650651A00C7A3E4 /* Build configuration list for PBXNativeTarget "GlucoseGlanceTests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				56A3DD5A2650651A00C7A3E4 /* Debug */,
+				56A3DD5B2650651A00C7A3E4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		56A3DD5C2650651A00C7A3E4 /* Build configuration list for PBXNativeTarget "GlucoseGlanceUITests" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				56A3DD5D2650651A00C7A3E4 /* Debug */,
+				56A3DD5E2650651A00C7A3E4 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+	};
+	rootObject = 56A3DD0A2650651400C7A3E4 /* Project object */;
+}
