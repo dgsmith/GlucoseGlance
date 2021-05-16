@@ -3,7 +3,7 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
@@ -19,6 +19,9 @@
 		56A3DD332650651900C7A3E4 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56A3DD322650651900C7A3E4 /* Preview Assets.xcassets */; };
 		56A3DD3F2650651A00C7A3E4 /* GlucoseGlanceTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56A3DD3E2650651A00C7A3E4 /* GlucoseGlanceTests.swift */; };
 		56A3DD4A2650651A00C7A3E4 /* GlucoseGlanceUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56A3DD492650651A00C7A3E4 /* GlucoseGlanceUITests.swift */; };
+		56A3DD652650BC6A00C7A3E4 /* ShareClient+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56A3DD642650BC6A00C7A3E4 /* ShareClient+Extensions.swift */; };
+		56A3DD8C2650D2FB00C7A3E4 /* ShareClient.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56A3DD8B2650D2FB00C7A3E4 /* ShareClient.xcframework */; };
+		56A3DD8D2650D2FB00C7A3E4 /* ShareClient.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 56A3DD8B2650D2FB00C7A3E4 /* ShareClient.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,6 +78,17 @@
 			name = "Embed Watch Content";
 			runOnlyForDeploymentPostprocessing = 0;
 		};
+		56A3DD8A2650D15400C7A3E4 /* Embed Frameworks */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 10;
+			files = (
+				56A3DD8D2650D2FB00C7A3E4 /* ShareClient.xcframework in Embed Frameworks */,
+			);
+			name = "Embed Frameworks";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
@@ -98,6 +112,8 @@
 		56A3DD452650651A00C7A3E4 /* GlucoseGlanceUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = GlucoseGlanceUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		56A3DD492650651A00C7A3E4 /* GlucoseGlanceUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GlucoseGlanceUITests.swift; sourceTree = "<group>"; };
 		56A3DD4B2650651A00C7A3E4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		56A3DD642650BC6A00C7A3E4 /* ShareClient+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ShareClient+Extensions.swift"; sourceTree = "<group>"; };
+		56A3DD8B2650D2FB00C7A3E4 /* ShareClient.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = ShareClient.xcframework; path = Carthage/Build/ShareClient.xcframework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +121,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				56A3DD8C2650D2FB00C7A3E4 /* ShareClient.xcframework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -133,6 +150,7 @@
 				56A3DD3D2650651A00C7A3E4 /* GlucoseGlanceTests */,
 				56A3DD482650651A00C7A3E4 /* GlucoseGlanceUITests */,
 				56A3DD112650651400C7A3E4 /* Products */,
+				56A3DD5F2650BBE200C7A3E4 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -163,6 +181,7 @@
 				56A3DD252650651800C7A3E4 /* GlucoseGlanceApp.swift */,
 				56A3DD272650651800C7A3E4 /* ContentView.swift */,
 				56A3DD292650651800C7A3E4 /* NotificationController.swift */,
+				56A3DD642650BC6A00C7A3E4 /* ShareClient+Extensions.swift */,
 				56A3DD2B2650651800C7A3E4 /* NotificationView.swift */,
 				56A3DD2D2650651800C7A3E4 /* ComplicationController.swift */,
 				56A3DD2F2650651900C7A3E4 /* Assets.xcassets */,
@@ -197,6 +216,14 @@
 				56A3DD4B2650651A00C7A3E4 /* Info.plist */,
 			);
 			path = GlucoseGlanceUITests;
+			sourceTree = "<group>";
+		};
+		56A3DD5F2650BBE200C7A3E4 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				56A3DD8B2650D2FB00C7A3E4 /* ShareClient.xcframework */,
+			);
+			name = Frameworks;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -240,9 +267,11 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 56A3DD4E2650651A00C7A3E4 /* Build configuration list for PBXNativeTarget "GlucoseGlance WatchKit Extension" */;
 			buildPhases = (
+				56A3DD672650BDC400C7A3E4 /* Carthage */,
 				56A3DD1C2650651800C7A3E4 /* Sources */,
 				56A3DD1D2650651800C7A3E4 /* Frameworks */,
 				56A3DD1E2650651800C7A3E4 /* Resources */,
+				56A3DD8A2650D15400C7A3E4 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
@@ -380,6 +409,29 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		56A3DD672650BDC400C7A3E4 /* Carthage */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+				"$(SRCROOT)/Carthage/Build/ShareClient_watchos.xcframework",
+			);
+			name = Carthage;
+			outputFileListPaths = (
+			);
+			outputPaths = (
+				"$(BUILD_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/ShareClient_watchos.xcframework",
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "# /usr/local/bin/carthage copy-frameworks\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		56A3DD1C2650651800C7A3E4 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
@@ -389,6 +441,7 @@
 				56A3DD282650651800C7A3E4 /* ContentView.swift in Sources */,
 				56A3DD2E2650651800C7A3E4 /* ComplicationController.swift in Sources */,
 				56A3DD262650651800C7A3E4 /* GlucoseGlanceApp.swift in Sources */,
+				56A3DD652650BC6A00C7A3E4 /* ShareClient+Extensions.swift in Sources */,
 				56A3DD2C2650651800C7A3E4 /* NotificationView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
