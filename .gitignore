@@ -27,3 +27,5 @@ DerivedData/
 
 Carthage/Build
 Carthage/Checkouts
+
+secrets.txt

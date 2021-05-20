@@ -1,1 +1,1 @@
-github "dgsmith/dexcom-share-client-swift" == 0.4.2
+github "dgsmith/dexcom-share-client-swift" "watchos-framework" 
