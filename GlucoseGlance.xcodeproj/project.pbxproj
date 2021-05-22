@@ -17,10 +17,10 @@
 		56A3DD652650BC6A00C7A3E4 /* ShareClient+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56A3DD642650BC6A00C7A3E4 /* ShareClient+Extensions.swift */; };
 		56A3DD8C2650D2FB00C7A3E4 /* ShareClient.xcframework in Frameworks */ = {isa = PBXBuildFile; fileRef = 56A3DD8B2650D2FB00C7A3E4 /* ShareClient.xcframework */; };
 		56A3DD8D2650D2FB00C7A3E4 /* ShareClient.xcframework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 56A3DD8B2650D2FB00C7A3E4 /* ShareClient.xcframework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
-		56A8C17C2656068400E7C8C8 /* CoffeeTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56A8C1752656068300E7C8C8 /* CoffeeTrackerApp.swift */; };
+		56A8C17C2656068400E7C8C8 /* GlucoseGlanceApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56A8C1752656068300E7C8C8 /* GlucoseGlanceApp.swift */; };
 		56A8C17D2656068400E7C8C8 /* ComplicationController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56A8C1762656068300E7C8C8 /* ComplicationController.swift */; };
 		56A8C17E2656068400E7C8C8 /* DexcomData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56A8C1772656068300E7C8C8 /* DexcomData.swift */; };
-		56A8C17F2656068400E7C8C8 /* CoffeeTrackerView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56A8C1782656068400E7C8C8 /* CoffeeTrackerView.swift */; };
+		56A8C17F2656068400E7C8C8 /* GlucoseGlanceView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56A8C1782656068400E7C8C8 /* GlucoseGlanceView.swift */; };
 		56A8C1812656068400E7C8C8 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56A8C17A2656068400E7C8C8 /* ContentView.swift */; };
 		56A8C1822656068400E7C8C8 /* ExtensionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56A8C17B2656068400E7C8C8 /* ExtensionDelegate.swift */; };
 		56A8C18426560ADE00E7C8C8 /* GGOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56A8C18326560ADE00E7C8C8 /* GGOptions.swift */; };
@@ -110,10 +110,10 @@
 		56A3DD4B2650651A00C7A3E4 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		56A3DD642650BC6A00C7A3E4 /* ShareClient+Extensions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "ShareClient+Extensions.swift"; sourceTree = "<group>"; };
 		56A3DD8B2650D2FB00C7A3E4 /* ShareClient.xcframework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcframework; name = ShareClient.xcframework; path = Carthage/Build/ShareClient.xcframework; sourceTree = "<group>"; };
-		56A8C1752656068300E7C8C8 /* CoffeeTrackerApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoffeeTrackerApp.swift; sourceTree = "<group>"; };
+		56A8C1752656068300E7C8C8 /* GlucoseGlanceApp.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseGlanceApp.swift; sourceTree = "<group>"; };
 		56A8C1762656068300E7C8C8 /* ComplicationController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ComplicationController.swift; sourceTree = "<group>"; };
 		56A8C1772656068300E7C8C8 /* DexcomData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DexcomData.swift; sourceTree = "<group>"; };
-		56A8C1782656068400E7C8C8 /* CoffeeTrackerView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CoffeeTrackerView.swift; sourceTree = "<group>"; };
+		56A8C1782656068400E7C8C8 /* GlucoseGlanceView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseGlanceView.swift; sourceTree = "<group>"; };
 		56A8C17A2656068400E7C8C8 /* ContentView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		56A8C17B2656068400E7C8C8 /* ExtensionDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ExtensionDelegate.swift; sourceTree = "<group>"; };
 		56A8C18326560ADE00E7C8C8 /* GGOptions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GGOptions.swift; sourceTree = "<group>"; };
@@ -183,8 +183,8 @@
 			children = (
 				56A8C18326560ADE00E7C8C8 /* GGOptions.swift */,
 				56A8C1772656068300E7C8C8 /* DexcomData.swift */,
-				56A8C1752656068300E7C8C8 /* CoffeeTrackerApp.swift */,
-				56A8C1782656068400E7C8C8 /* CoffeeTrackerView.swift */,
+				56A8C1752656068300E7C8C8 /* GlucoseGlanceApp.swift */,
+				56A8C1782656068400E7C8C8 /* GlucoseGlanceView.swift */,
 				56A8C1762656068300E7C8C8 /* ComplicationController.swift */,
 				56A8C17A2656068400E7C8C8 /* ContentView.swift */,
 				56A8C17B2656068400E7C8C8 /* ExtensionDelegate.swift */,
@@ -442,10 +442,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				56A8C18426560ADE00E7C8C8 /* GGOptions.swift in Sources */,
-				56A8C17F2656068400E7C8C8 /* CoffeeTrackerView.swift in Sources */,
+				56A8C17F2656068400E7C8C8 /* GlucoseGlanceView.swift in Sources */,
 				56A8C1822656068400E7C8C8 /* ExtensionDelegate.swift in Sources */,
 				56A8C1812656068400E7C8C8 /* ContentView.swift in Sources */,
-				56A8C17C2656068400E7C8C8 /* CoffeeTrackerApp.swift in Sources */,
+				56A8C17C2656068400E7C8C8 /* GlucoseGlanceApp.swift in Sources */,
 				56A8C17E2656068400E7C8C8 /* DexcomData.swift in Sources */,
 				56A3DD652650BC6A00C7A3E4 /* ShareClient+Extensions.swift in Sources */,
 				56A8C17D2656068400E7C8C8 /* ComplicationController.swift in Sources */,

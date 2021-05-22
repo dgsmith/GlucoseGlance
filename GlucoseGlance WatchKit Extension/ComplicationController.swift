@@ -9,20 +9,19 @@ import ClockKit
 
 class ComplicationController: NSObject, CLKComplicationDataSource {
     
-    // The Coffee Tracker app's data model
+    // The app's data model
     lazy var data = DexcomData.shared
     
     // MARK: - Timeline Configuration
     
     // Define how far into the future the app can provide data.
-    func getTimelineEndDate(for complication: CLKComplication, withHandler handler: @escaping (Date?) -> Void) {
-        // Indicate that the app can provide timeline entries for the next 2 hours.
-        handler(Date().addingTimeInterval(2.0 * 60.0 * 60.0))
-    }
+//    func getTimelineEndDate(for complication: CLKComplication, withHandler handler: @escaping (Date?) -> Void) {
+//        // Indicate that the app can provide timeline entries for the next 2 hours.
+//        handler(Date().addingTimeInterval(2.0 * 60.0 * 60.0))
+//    }
     
     // Define whether the complication is visible when the watch is unlocked.
     func getPrivacyBehavior(for complication: CLKComplication, withHandler handler: @escaping (CLKComplicationPrivacyBehavior) -> Void) {
-        // This is potentially sensitive data. Hide it on the lock screen.
         handler(.showOnLockScreen)
     }
     
@@ -140,10 +139,11 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             glucoseProvider, glucoseTrendProvider)
         combinedGlucoseProvider.tintColor = data.color(forGlucose: data.currentGlucose.glucose)
         
-        let timeDeltaProvider = CLKSimpleTextProvider(
-            text: "\(data.currentGlucoseTimeDeltaString(atDate: date).long)",
-            shortText: "\(data.currentGlucoseTimeDeltaString(atDate: date).short)")
-        
+        let timeDeltaProvider = CLKRelativeDateTextProvider(
+            date: data.currentGlucose.timestamp,
+            style: .natural,
+            units: .second)
+                
         // Create the template using the providers.
         return CLKComplicationTemplateModularSmallStackText(line1TextProvider: combinedGlucoseProvider,
                                                             line2TextProvider: timeDeltaProvider)
@@ -164,10 +164,11 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             format: "%@ %@ %@",
             glucoseProvider, glucoseTrendProvider, glucoseDeltaProvider)
         
-        let timeDeltaProvider = CLKSimpleTextProvider(
-            text: "\(data.currentGlucoseTimeDeltaString(atDate: date).long)",
-            shortText: "\(data.currentGlucoseTimeDeltaString(atDate: date).short)")
-        let timeProvider = CLKSimpleTextProvider(text: "\(data.currentGlucoseTimeString)")
+        let timeDeltaProvider = CLKRelativeDateTextProvider(
+            date: data.currentGlucose.timestamp,
+            style: .natural,
+            units: .second)
+        let timeProvider = CLKTimeTextProvider(date: data.currentGlucose.timestamp)
         
         return CLKComplicationTemplateModularLargeStandardBody(
             headerTextProvider: combinedGlucoseProvider,
@@ -191,12 +192,13 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     private func createUtilitarianLargeTemplate(forDate date: Date) -> CLKComplicationTemplate {
         let glucoseProvider = CLKSimpleTextProvider(text: "\(data.currentGlucoseString)")
         let glucoseTrendProvider = CLKSimpleTextProvider(text: "\(data.currentGlucoseTrendSymbolString)")
-        let timeDeltaProvider = CLKSimpleTextProvider(
-            text: "\(data.currentGlucoseTimeDeltaString(atDate: date).long)",
-            shortText: "\(data.currentGlucoseTimeDeltaString(atDate: date).short)")
+        let timeDeltaProvider = CLKRelativeDateTextProvider(
+            date: data.currentGlucose.timestamp,
+            style: .natural,
+            units: .second)
         
         let combinedProvider = CLKTextProvider(
-            format: "%@ %@ %@",
+            format: "%@ %@, %@",
             glucoseProvider, glucoseTrendProvider, timeDeltaProvider)
         
         return CLKComplicationTemplateUtilitarianLargeFlat(textProvider: combinedProvider)        
@@ -209,7 +211,9 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         
         let glucoseTrendProvider = CLKSimpleTextProvider(text: "\(data.currentGlucoseTrendSymbolString)")
         
-        return CLKComplicationTemplateCircularSmallStackText(line1TextProvider: glucoseTrendProvider, line2TextProvider: glucoseProvider)
+        return CLKComplicationTemplateCircularSmallStackText(
+            line1TextProvider: glucoseTrendProvider,
+            line2TextProvider: glucoseProvider)
     }
     
     // Return an extra large template.
@@ -221,9 +225,10 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             format: "%@ %@ %@",
             glucoseProvider, glucoseTrendProvider, glucoseDeltaProvider)
         
-        let timeDeltaProvider = CLKSimpleTextProvider(
-            text: "\(data.currentGlucoseTimeDeltaString(atDate: date).long)",
-            shortText: "\(data.currentGlucoseTimeDeltaString(atDate: date).short)")
+        let timeDeltaProvider = CLKRelativeDateTextProvider(
+            date: data.currentGlucose.timestamp,
+            style: .natural,
+            units: .second)
         
         return CLKComplicationTemplateExtraLargeStackText(
             line1TextProvider: combinedGlucoseProvider,
@@ -245,10 +250,11 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             format: "%@ %@ %@",
             glucoseProvider, glucoseTrendProvider, glucoseDeltaProvider)
         
-        let timeProvider = CLKSimpleTextProvider(text: "\(data.currentGlucoseTimeString)")
-        let timeDeltaProvider = CLKSimpleTextProvider(
-            text: "\(data.currentGlucoseTimeDeltaString(atDate: date).long)",
-            shortText: "\(data.currentGlucoseTimeDeltaString(atDate: date).short)")
+        let timeProvider = CLKTimeTextProvider(date: data.currentGlucose.timestamp)
+        let timeDeltaProvider = CLKRelativeDateTextProvider(
+            date: data.currentGlucose.timestamp,
+            style: .natural,
+            units: .second)
         let combinedTimeProfider = CLKTextProvider(format: "%@, %@", timeProvider, timeDeltaProvider)
         
         return CLKComplicationTemplateGraphicCornerStackText(
@@ -260,14 +266,14 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     private func createGraphicCircleTemplate(forDate date: Date) -> CLKComplicationTemplate {
         let glucoseProvider = CLKSimpleTextProvider(text: "\(data.currentGlucoseString)")
         let glucoseTrendProvider = CLKSimpleTextProvider(text: "\(data.currentGlucoseTrendSymbolString)")
-                
-        let percentage = Float(data.currentGlucoseTimeDeltaValue(atDate: date) / 15.0)
-        let clamped = min(max(percentage, 0.0), 1.0)
-        let gaugeProvider = CLKSimpleGaugeProvider(style: .fill,
-                                                   gaugeColors: [.green, .yellow, .red],
-                                                   gaugeColorLocations: [0.0, 7.0 / 15.0, 12.0 / 15.0] as [NSNumber],
-                                                   fillFraction: clamped)
-                
+        
+        let gaugeProvider = CLKTimeIntervalGaugeProvider(
+            style: .fill,
+            gaugeColors: nil,
+            gaugeColorLocations: nil,
+            start: data.currentGlucose.timestamp,
+            end: data.currentGlucose.timestamp.addingTimeInterval(GGOptions.timeGuageEndMinutes))
+                                
         return CLKComplicationTemplateGraphicCircularOpenGaugeSimpleText(
             gaugeProvider: gaugeProvider,
             bottomTextProvider: glucoseTrendProvider,
@@ -287,8 +293,12 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         let glucoseDeltaProvider = CLKSimpleTextProvider(text: "\(data.currentGlucoseDeltaString)")
         let combinedGlucoseProvider = CLKTextProvider(format: "%@ %@ %@", glucoseProvider, glucoseTrendProvider, glucoseDeltaProvider)
         
-        let timeDeltaProvider = CLKSimpleTextProvider(text: "\(data.currentGlucoseTimeDeltaString(atDate: date).long)", shortText: "\(data.currentGlucoseTimeDeltaString(atDate: date).short)")
-        let timeProvider = CLKSimpleTextProvider(text: "\(data.currentGlucoseTimeString)")
+        let timeProvider = CLKTimeTextProvider(date: data.currentGlucose.timestamp)
+        
+        let timeDeltaProvider = CLKRelativeDateTextProvider(
+            date: data.currentGlucose.timestamp,
+            style: .natural,
+            units: .second)
         
         return CLKComplicationTemplateGraphicRectangularStandardBody(
             headerTextProvider: combinedGlucoseProvider,
@@ -309,10 +319,12 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             line1TextProvider: glucoseTrendProvider,
             line2TextProvider: combinedGlucoseProvider)
         
-        let timeDeltaProvider = CLKSimpleTextProvider(
-            text: "\(data.currentGlucoseTimeDeltaString(atDate: date).long)",
-            shortText: "\(data.currentGlucoseTimeDeltaString(atDate: date).short)")
-        let timeProvider = CLKSimpleTextProvider(text: "\(data.currentGlucoseTimeString)")
+        let timeDeltaProvider = CLKRelativeDateTextProvider(
+            date: data.currentGlucose.timestamp,
+            style: .natural,
+            units: .second)
+        let timeProvider = CLKTimeTextProvider(date: data.currentGlucose.timestamp)
+        
         let combinedTimeProvider = CLKTextProvider(format: "%@, %@", timeProvider, timeDeltaProvider)
                 
         // Create the bezel template using the circle template and the text provider.
@@ -326,12 +338,12 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         let glucoseProvider = CLKSimpleTextProvider(text: "\(data.currentGlucoseString)")
         let glucoseTrendProvider = CLKSimpleTextProvider(text: "\(data.currentGlucoseTrendSymbolString)")
                 
-        let percentage = Float(data.currentGlucoseTimeDeltaValue(atDate: date) / 15.0)
-        let clamped = min(max(percentage, 0.0), 1.0)
-        let gaugeProvider = CLKSimpleGaugeProvider(style: .fill,
-                                                   gaugeColors: [.green, .yellow, .red],
-                                                   gaugeColorLocations: [0.0, 7.0 / 15.0, 12.0 / 15.0] as [NSNumber],
-                                                   fillFraction: clamped)
+        let gaugeProvider = CLKTimeIntervalGaugeProvider(
+            style: .fill,
+            gaugeColors: nil,
+            gaugeColorLocations: nil,
+            start: data.currentGlucose.timestamp,
+            end: data.currentGlucose.timestamp.addingTimeInterval(GGOptions.timeGuageEndMinutes))
         
         return CLKComplicationTemplateGraphicExtraLargeCircularOpenGaugeSimpleText(
             gaugeProvider: gaugeProvider,

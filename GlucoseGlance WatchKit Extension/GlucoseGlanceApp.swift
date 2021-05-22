@@ -2,13 +2,13 @@
 See LICENSE folder for this sample’s licensing information.
 
 Abstract:
-The entry point for the Coffee Tracker app.
+The entry point for the Glucose Glance app.
 */
 
 import SwiftUI
 
 @main
-struct CoffeeTrackerApp: App {
+struct GlucoseGlanceApp: App {
     
     @WKExtensionDelegateAdaptor private var appDelegate: ExtensionDelegate
     

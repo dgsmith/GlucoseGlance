@@ -36,19 +36,13 @@ class DexcomData: ObservableObject {
         formatter.minimumSignificantDigits = 1
         return formatter
     }()
-        
-    lazy var dateFormatter: DateFormatter = {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .none
-        dateFormatter.timeStyle = .short
-        dateFormatter.timeZone = .autoupdatingCurrent
-        
-        return dateFormatter
-    }()
-    
+            
     // A background queue used to save and load the model data.
-    private var background = DispatchQueue(label: "Background Queue",
-    qos: .userInitiated)
+    private var background = DispatchQueue(
+        label: "Background Queue",
+        qos: .userInitiated)
+    
+    private var futureLoadScheduled: Bool = false
         
     @Published public var currentGlucoseMeasurements = [ShareGlucose]() {
         didSet {
@@ -72,12 +66,19 @@ class DexcomData: ObservableObject {
         return currentGlucoseMeasurements.first ?? ShareGlucose(glucose: 0, trend: 0, timestamp: Date())
     }
     
-    public var currentGlucoseDelta: Double {
+    public var currentGlucoseDelta: Double? {
         if currentGlucoseMeasurements.count <= 1 {
             return 0
         }
         
-        return Double(currentGlucose.glucose) - Double(currentGlucoseMeasurements[1].glucose)
+        let latest = currentGlucoseMeasurements[0]
+        let nextLatest = currentGlucoseMeasurements[1]
+        
+        if latest.timestamp.distance(to: nextLatest.timestamp) > 5.5 * 60.0 {
+            return nil
+        }
+        
+        return Double(latest.glucose) - Double(nextLatest.glucose)
     }
     
     public var currentGlucoseString: String {
@@ -97,6 +98,10 @@ class DexcomData: ObservableObject {
     }
     
     public var currentGlucoseDeltaString: String {
+        guard let currentGlucoseDelta = currentGlucoseDelta else {
+            return ""
+        }
+        
         let prefix = currentGlucoseDelta >= 0 ? "+" : ""
         guard let result = numberFormatter.string(from: NSNumber(value: currentGlucoseDelta)) else {
             fatalError("*** Unable to create a string for \(currentGlucose.glucose) ***")
@@ -104,35 +109,7 @@ class DexcomData: ObservableObject {
         
         return "\(prefix)\(result)"
     }
-    
-    public var currentGlucoseTimeString: String {
-        return dateFormatter.string(from: currentGlucose.timestamp)
-    }
-    
-    public func currentGlucoseTimeDeltaString(atDate date: Date) -> (long: String, short: String) {
-        let minutes = Int(round(date.timeIntervalSince(currentGlucose.timestamp) / 60))
-        
-        if minutes < GGOptions.nowThreshold {
-            return ("NOW", "NOW")
-        }
-        
-        if minutes > GGOptions.oldThreshold {
-            return ("OLD", "OLD")
-        }
-        
-        let minString = minutes == 1 ? "min" : "mins"
-        
-        guard let result = numberFormatter.string(from: NSNumber(value: minutes)) else {
-            fatalError("*** Unable to create a string for \(minutes) ***")
-        }
-        
-        return ("\(result) \(minString) ago", "\(result) \(minString)")
-    }
-    
-    public func currentGlucoseTimeDeltaValue(atDate date: Date) -> Double {
-        return date.timeIntervalSince(currentGlucose.timestamp) / 60.0
-    }
-        
+                    
     public func color(forGlucose glucose: UInt16) -> UIColor {
         if glucose < GGOptions.redThreshold {
             return .red
@@ -257,18 +234,43 @@ class DexcomData: ObservableObject {
         }
     }
     
+    // Completion handler will always return true -- in order to schedule another background task
     public func loadNewDexcomData(completionHandler: @escaping (Bool) -> Void = { _ in }) {
         logger.debug("Loading Data from Dexcom")
+        
+        let timeToCheck = currentGlucose.timestamp.addingTimeInterval(GGOptions.automaticFetchInterval)
+        let now = Date()
+        if now < timeToCheck {
+            logger.debug("Not enough time elapsed (\(Date().distance(to: timeToCheck)))")
+            
+            if !futureLoadScheduled {
+                let secondsFromNow = now.distance(to: timeToCheck)
+                self.logger.debug("Future load scheduled.")
+                futureLoadScheduled = true
+                DispatchQueue.main.asyncAfter(
+                    deadline: .now() + secondsFromNow,
+                    execute:
+                        { [weak self] in
+                            self?.futureLoadScheduled = false
+                            self?.loadNewDexcomData()
+                        }
+                )
+            } else {
+                self.logger.debug("Future load already in progress.")
+            }
+            completionHandler(true)
+            return
+        }
         
         self.client.fetchLast(GGOptions.dexcomFetchCount) { (error, newGlucose) in
             if let error = error {
                 self.logger.debug("Got fetch error from Dexcom: \(error)")
-                completionHandler(false)
+                completionHandler(true)
                 return
             }
             
             guard let newGlucose = newGlucose else {
-                completionHandler(false)
+                completionHandler(true)
                 return
             }
             
@@ -276,11 +278,40 @@ class DexcomData: ObservableObject {
                 // Get a copy of the current glucose data.
                 let oldGlucose = self.currentGlucoseMeasurements
                 
+                // Combine old and new together
                 let newNewGlucose = Set(oldGlucose).union(Set(newGlucose)).sorted { lhs, rhs in
                     lhs.timestamp.compare(rhs.timestamp) == .orderedDescending
                 }
-                                                                
-                self.currentGlucoseMeasurements = newNewGlucose
+                                         
+                // Only update if there have been changes.
+                if self.currentGlucoseMeasurements != newNewGlucose {
+                    self.currentGlucoseMeasurements = newNewGlucose
+                    
+                    // Schedule another read!
+                    if !self.futureLoadScheduled {
+                        let futureLoadTime = self.currentGlucoseMeasurements.first!.timestamp.addingTimeInterval(GGOptions.automaticFetchInterval)
+                        let secondsFromNow = Date().distance(to: futureLoadTime)
+                        if secondsFromNow > 0 {
+                            self.logger.debug("Future load scheduled.")
+                            self.futureLoadScheduled = true
+                            DispatchQueue.main.asyncAfter(
+                                deadline: .now() + secondsFromNow,
+                                execute:
+                                    { [weak self] in
+                                        self?.futureLoadScheduled = false
+                                        self?.loadNewDexcomData()
+                                    }
+                            )
+                        } else {
+                            self.logger.debug("Invalide future load time (\(secondsFromNow)).")
+                        }
+                    } else {
+                        self.logger.debug("Future load already in progress.")
+                    }
+                } else {
+                    self.logger.debug("The glucose measurements hasn't changed.")
+                }
+                
                 completionHandler(true)
             }
         }
@@ -300,7 +331,7 @@ class DexcomData: ObservableObject {
     }
 }
 
-// Filter array to only the drinks in the last 24 hours.
+// Filter array to only the glucose measurements in the last 24 hours.
 private func filterGlucoseMeasurements(glucoseMeasurements: [ShareGlucose]) -> [ShareGlucose] {
     // The current date and time.
     let endDate = Date()
@@ -308,7 +339,7 @@ private func filterGlucoseMeasurements(glucoseMeasurements: [ShareGlucose]) -> [
     // The date and time 24 hours ago.
     let startDate = endDate.addingTimeInterval(-24.0 * 60.0 * 60.0)
     
-    // Return an array of drinks with a date parameter between
+    // Return an array of glucose measurements with a date parameter between
     // the start and end dates.
     return glucoseMeasurements.filter { (glucose) -> Bool in
         (startDate.compare(glucose.timestamp) != .orderedDescending) &&

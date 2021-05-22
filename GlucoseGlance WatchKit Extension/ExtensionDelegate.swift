@@ -29,7 +29,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
             // Handle background refresh tasks.
             case let backgroundTask as WKApplicationRefreshBackgroundTask:
                 
-                // Check for updates from HealthKit.
+                // Check for updates from Dexcom.
                 let model = DexcomData.shared
                                 
                 model.loadNewDexcomData { [unowned self] (success) in

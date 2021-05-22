@@ -22,7 +22,7 @@ struct ContentView: View {
     
     // Create the main view, and pass the model.
     var body: some View {
-        CoffeeTrackerView()
+        GlucoseGlanceView()
             .environmentObject(data)
             .onChange(of: scenePhase) { (phase) in
                 switch phase {
@@ -33,7 +33,6 @@ struct ContentView: View {
                 case .active:
                     logger.debug("Scene became active.")
                     
-                    // Make sure the app has requested authorization.
                     let model = DexcomData.shared
                     model.loadNewDexcomData()
                     
