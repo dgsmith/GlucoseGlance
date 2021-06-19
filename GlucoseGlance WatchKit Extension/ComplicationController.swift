@@ -10,24 +10,19 @@ import ClockKit
 class ComplicationController: NSObject, CLKComplicationDataSource {
     
     // The app's data model
-    lazy var data = DexcomData.shared
+    lazy var dataModel = DexcomData.shared
     
     // MARK: - Timeline Configuration
-    
-    // Define how far into the future the app can provide data.
-//    func getTimelineEndDate(for complication: CLKComplication, withHandler handler: @escaping (Date?) -> Void) {
-//        // Indicate that the app can provide timeline entries for the next 2 hours.
-//        handler(Date().addingTimeInterval(2.0 * 60.0 * 60.0))
-//    }
-    
+        
     // Define whether the complication is visible when the watch is unlocked.
-    func getPrivacyBehavior(for complication: CLKComplication, withHandler handler: @escaping (CLKComplicationPrivacyBehavior) -> Void) {
+    func getPrivacyBehavior(for complication: CLKComplication,
+                            withHandler handler: @escaping (CLKComplicationPrivacyBehavior) -> Void) {
         handler(.showOnLockScreen)
     }
     
     func getComplicationDescriptors(handler: @escaping ([CLKComplicationDescriptor]) -> Void) {
         let descriptor = CLKComplicationDescriptor(identifier: "Glucose_Glance_Glucose_Level",
-                                                   displayName: "Glucose Glance",
+                                                   displayName: "Glucose Glance Readings",
                                                    supportedFamilies: CLKComplicationFamily.allCases)
         handler([descriptor])
     }
@@ -35,112 +30,88 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     // MARK: - Timeline Population
     
     // Return the current timeline entry.
-    func getCurrentTimelineEntry(for complication: CLKComplication, withHandler handler: @escaping (CLKComplicationTimelineEntry?) -> Void) {
-        handler(createTimelineEntry(forComplication: complication, date: Date()))
+    func getCurrentTimelineEntry(for complication: CLKComplication,
+                                 withHandler handler: @escaping (CLKComplicationTimelineEntry?) -> Void) {
+        // Get the correct template based on the complication.
+        let template = createTemplate(forComplication: complication, withData: dataModel)
+        
+        handler(CLKComplicationTimelineEntry(date: Date(), complicationTemplate: template))
     }
-    
-    // Return future timeline entries.
-    func getTimelineEntries(for complication: CLKComplication,
-                            after date: Date,
-                            limit: Int,
-                            withHandler handler: @escaping ([CLKComplicationTimelineEntry]?) -> Void) {
         
-        let oneMinute = 1.0 * 60.0
-        let twoHours = 2.0 * 60.0 * 60.0
-        
-        // Create an array to hold the timeline entries.
-        var entries = [CLKComplicationTimelineEntry]()
-        
-        // Calculate the start and end dates.
-        var current = date.addingTimeInterval(oneMinute)
-        let endDate = date.addingTimeInterval(twoHours)
-        
-        // Create a timeline entry for every five minutes from the starting time.
-        // Stop once you reach the limit or the end date.
-        while (current.compare(endDate) == .orderedAscending) && (entries.count < limit) {
-            entries.append(createTimelineEntry(forComplication: complication, date: current))
-            current = current.addingTimeInterval(oneMinute)
-        }
-        
-        handler(entries)
-    }
-    
     // MARK: - Placeholder Templates
     
     // Return a localized template with generic information.
     // The system displays the placeholder in the complication selector.
-    func getLocalizableSampleTemplate(for complication: CLKComplication, withHandler handler: @escaping (CLKComplicationTemplate?) -> Void) {
-        // Calculate the date 25 hours from now.
-        // Since it's more than 24 hours in the future,
-        // Our template will always show zero cups and zero mg caffeine.
-        let future = Date().addingTimeInterval(25.0 * 60.0 * 60.0)
-        let template = createTemplate(forComplication: complication, date: future)
-        handler(template)
+    func getLocalizableSampleTemplate(for complication: CLKComplication,
+                                      withHandler handler: @escaping (CLKComplicationTemplate?) -> Void) {
+        handler(createTemplate(forComplication: complication, withData: ExampleDexcomData(timestamp: Date())))
     }
-    
-    //    We don't need to implement this method because our privacy behavior is hideOnLockScreen.
-    //    Always-On Time automatically hides complications that would be hidden when the device is locked.
-//    func getAlwaysOnTemplate(for complication: CLKComplication, withHandler handler: @escaping (CLKComplicationTemplate?) -> Void) {
-//
-//    }
+        
     // MARK: - Private Methods
     
     // Return a timeline entry for the specified complication and date.
-    private func createTimelineEntry(forComplication complication: CLKComplication, date: Date) -> CLKComplicationTimelineEntry {
+    private func createTimelineEntry(forComplication complication: CLKComplication) -> CLKComplicationTimelineEntry {
         
         // Get the correct template based on the complication.
-        let template = createTemplate(forComplication: complication, date: date)
+        let template = createTemplate(forComplication: complication, withData: dataModel)
         
         // Use the template and date to create a timeline entry.
-        return CLKComplicationTimelineEntry(date: date, complicationTemplate: template)
+        return CLKComplicationTimelineEntry(date: Date(), complicationTemplate: template)
     }
     
     // Select the correct template based on the complication's family.
-    private func createTemplate(forComplication complication: CLKComplication, date: Date) -> CLKComplicationTemplate {
+    private func createTemplate(forComplication complication: CLKComplication, withData data: DexcomDataModelInterface) -> CLKComplicationTemplate {
         switch complication.family {
         case .modularSmall:
-            return createModularSmallTemplate(forDate: date)
+            return createModularSmallTemplate(data)
+            
         case .modularLarge:
-            return createModularLargeTemplate(forDate: date)
+            return createModularLargeTemplate(data)
+            
         case .utilitarianSmallFlat, .utilitarianSmall:
-            return createUtilitarianSmallFlatTemplate(forDate: date)
+            return createUtilitarianSmallFlatTemplate(data)
+            
         case .utilitarianLarge:
-            return createUtilitarianLargeTemplate(forDate: date)
+            return createUtilitarianLargeTemplate(data)
+
         case .circularSmall:
-            return createCircularSmallTemplate(forDate: date)
+            return createCircularSmallTemplate(data)
+
         case .extraLarge:
-            return createExtraLargeTemplate(forDate: date)
+            return createExtraLargeTemplate(data)
+
         case .graphicCorner:
-            return createGraphicCornerTemplate(forDate: date)
+            return createGraphicCornerTemplate(data)
+
         case .graphicCircular:
-            return createGraphicCircleTemplate(forDate: date)
+            return createGraphicCircleTemplate(data)
+
         case .graphicRectangular:
-            return createGraphicRectangularTemplate(forDate: date)
+            return createGraphicRectangularTemplate(data)
+
         case .graphicBezel:
-            return createGraphicBezelTemplate(forDate: date)
+            return createGraphicBezelTemplate(data)
+
         case .graphicExtraLarge:
-            if #available(watchOSApplicationExtension 7.0, *) {
-                return createGraphicExtraLargeTemplate(forDate: date)
-            } else {
-                fatalError("Graphic Extra Large template is only available on watchOS 7.")
-            }
+            return createGraphicExtraLargeTemplate(data)
+
         @unknown default:
             fatalError("*** Unknown Complication Family ***")
         }
     }
     
     // Return a modular small template.
-    private func createModularSmallTemplate(forDate date: Date) -> CLKComplicationTemplate {
+    private func createModularSmallTemplate(_ dataModel: DexcomDataModelInterface) -> CLKComplicationTemplate {
         // Create the data providers.
-        let glucoseProvider = CLKSimpleTextProvider(text: "\(data.currentGlucoseString)")
-        let glucoseTrendProvider = CLKSimpleTextProvider(text: "\(data.currentGlucoseTrendSymbolString)")
+        let glucoseProvider = CLKSimpleTextProvider(text: "\(dataModel.currentReadingValueString)")
+        let glucoseTrendProvider = CLKSimpleTextProvider(text: "\(dataModel.currentReadingTrendSymbolString)")
         let combinedGlucoseProvider = CLKTextProvider(
             format: "%@ %@",
             glucoseProvider, glucoseTrendProvider)
-        combinedGlucoseProvider.tintColor = data.color(forGlucose: data.currentGlucose.glucose)
+        combinedGlucoseProvider.tintColor = dataModel.color(forGlucose: dataModel.currentReading.value)
         
         let timeDeltaProvider = CLKRelativeDateTextProvider(
-            date: data.currentGlucose.timestamp,
+            date: dataModel.currentReading.timestamp,
             style: .natural,
             units: .second)
                 
@@ -150,25 +121,25 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     }
     
     // Return a modular large template.
-    private func createModularLargeTemplate(forDate date: Date) -> CLKComplicationTemplate {
-        let tintColor = data.color(forGlucose: data.currentGlucose.glucose)
+    private func createModularLargeTemplate(_ dataModel: DexcomDataModelInterface) -> CLKComplicationTemplate {
+        let tintColor = dataModel.color(forGlucose: dataModel.currentReading.value)
         
-        let glucoseProvider = CLKSimpleTextProvider(text: "\(data.currentGlucoseString)")
+        let glucoseProvider = CLKSimpleTextProvider(text: "\(dataModel.currentReadingValueString)")
         glucoseProvider.tintColor = tintColor
         
-        let glucoseTrendProvider = CLKSimpleTextProvider(text: "\(data.currentGlucoseTrendSymbolString)")
+        let glucoseTrendProvider = CLKSimpleTextProvider(text: "\(dataModel.currentReadingTrendSymbolString)")
         glucoseTrendProvider.tintColor = tintColor
         
-        let glucoseDeltaProvider = CLKSimpleTextProvider(text: "\(data.currentGlucoseDeltaString)")
+        let glucoseDeltaProvider = CLKSimpleTextProvider(text: "\(dataModel.currentReadingDeltaString)")
         let combinedGlucoseProvider = CLKTextProvider(
             format: "%@ %@ %@",
             glucoseProvider, glucoseTrendProvider, glucoseDeltaProvider)
         
         let timeDeltaProvider = CLKRelativeDateTextProvider(
-            date: data.currentGlucose.timestamp,
+            date: dataModel.currentReading.timestamp,
             style: .natural,
             units: .second)
-        let timeProvider = CLKTimeTextProvider(date: data.currentGlucose.timestamp)
+        let timeProvider = CLKTimeTextProvider(date: dataModel.currentReading.timestamp)
         
         return CLKComplicationTemplateModularLargeStandardBody(
             headerTextProvider: combinedGlucoseProvider,
@@ -177,10 +148,10 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     }
         
     // Return a utilitarian small flat template.
-    private func createUtilitarianSmallFlatTemplate(forDate date: Date) -> CLKComplicationTemplate {
-        let glucoseProvider = CLKSimpleTextProvider(text: "\(data.currentGlucoseString)")
-        let glucoseTrendProvider = CLKSimpleTextProvider(text: "\(data.currentGlucoseTrendSymbolString)")
-        let glucoseDeltaProvider = CLKSimpleTextProvider(text: "\(data.currentGlucoseDeltaString)")
+    private func createUtilitarianSmallFlatTemplate(_ dataModel: DexcomDataModelInterface) -> CLKComplicationTemplate {
+        let glucoseProvider = CLKSimpleTextProvider(text: "\(dataModel.currentReadingValueString)")
+        let glucoseTrendProvider = CLKSimpleTextProvider(text: "\(dataModel.currentReadingTrendSymbolString)")
+        let glucoseDeltaProvider = CLKSimpleTextProvider(text: "\(dataModel.currentReadingDeltaString)")
         let combinedGlucoseProvider = CLKTextProvider(
             format: "%@ %@ %@",
             glucoseProvider, glucoseTrendProvider, glucoseDeltaProvider)
@@ -189,11 +160,11 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     }
     
     // Return a utilitarian large template.
-    private func createUtilitarianLargeTemplate(forDate date: Date) -> CLKComplicationTemplate {
-        let glucoseProvider = CLKSimpleTextProvider(text: "\(data.currentGlucoseString)")
-        let glucoseTrendProvider = CLKSimpleTextProvider(text: "\(data.currentGlucoseTrendSymbolString)")
+    private func createUtilitarianLargeTemplate(_ dataModel: DexcomDataModelInterface) -> CLKComplicationTemplate {
+        let glucoseProvider = CLKSimpleTextProvider(text: "\(dataModel.currentReadingValueString)")
+        let glucoseTrendProvider = CLKSimpleTextProvider(text: "\(dataModel.currentReadingTrendSymbolString)")
         let timeDeltaProvider = CLKRelativeDateTextProvider(
-            date: data.currentGlucose.timestamp,
+            date: dataModel.currentReading.timestamp,
             style: .natural,
             units: .second)
         
@@ -205,11 +176,11 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     }
     
     // Return a circular small template.
-    private func createCircularSmallTemplate(forDate date: Date) -> CLKComplicationTemplate {
-        let glucoseProvider = CLKSimpleTextProvider(text: "\(data.currentGlucoseString)")
-        glucoseProvider.tintColor = data.color(forGlucose: data.currentGlucose.glucose)
+    private func createCircularSmallTemplate(_ dataModel: DexcomDataModelInterface) -> CLKComplicationTemplate {
+        let glucoseProvider = CLKSimpleTextProvider(text: "\(dataModel.currentReadingValueString)")
+        glucoseProvider.tintColor = dataModel.color(forGlucose: dataModel.currentReading.value)
         
-        let glucoseTrendProvider = CLKSimpleTextProvider(text: "\(data.currentGlucoseTrendSymbolString)")
+        let glucoseTrendProvider = CLKSimpleTextProvider(text: "\(dataModel.currentReadingTrendSymbolString)")
         
         return CLKComplicationTemplateCircularSmallStackText(
             line1TextProvider: glucoseTrendProvider,
@@ -217,16 +188,16 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     }
     
     // Return an extra large template.
-    private func createExtraLargeTemplate(forDate date: Date) -> CLKComplicationTemplate {
-        let glucoseProvider = CLKSimpleTextProvider(text: "\(data.currentGlucoseString)")
-        let glucoseTrendProvider = CLKSimpleTextProvider(text: "\(data.currentGlucoseTrendSymbolString)")
-        let glucoseDeltaProvider = CLKSimpleTextProvider(text: "\(data.currentGlucoseDeltaString)")
+    private func createExtraLargeTemplate(_ dataModel: DexcomDataModelInterface) -> CLKComplicationTemplate {
+        let glucoseProvider = CLKSimpleTextProvider(text: "\(dataModel.currentReadingValueString)")
+        let glucoseTrendProvider = CLKSimpleTextProvider(text: "\(dataModel.currentReadingTrendSymbolString)")
+        let glucoseDeltaProvider = CLKSimpleTextProvider(text: "\(dataModel.currentReadingDeltaString)")
         let combinedGlucoseProvider = CLKTextProvider(
             format: "%@ %@ %@",
             glucoseProvider, glucoseTrendProvider, glucoseDeltaProvider)
         
         let timeDeltaProvider = CLKRelativeDateTextProvider(
-            date: data.currentGlucose.timestamp,
+            date: dataModel.currentReading.timestamp,
             style: .natural,
             units: .second)
         
@@ -236,23 +207,23 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     }
     
     // Return a graphic template that fills the corner of the watch face.
-    private func createGraphicCornerTemplate(forDate date: Date) -> CLKComplicationTemplate {
-        let tintColor = data.color(forGlucose: data.currentGlucose.glucose)
+    private func createGraphicCornerTemplate(_ dataModel: DexcomDataModelInterface) -> CLKComplicationTemplate {
+        let tintColor = dataModel.color(forGlucose: dataModel.currentReading.value)
         
-        let glucoseProvider = CLKSimpleTextProvider(text: "\(data.currentGlucoseString)")
+        let glucoseProvider = CLKSimpleTextProvider(text: "\(dataModel.currentReadingValueString)")
         glucoseProvider.tintColor = tintColor
         
-        let glucoseTrendProvider = CLKSimpleTextProvider(text: "\(data.currentGlucoseTrendSymbolString)")
+        let glucoseTrendProvider = CLKSimpleTextProvider(text: "\(dataModel.currentReadingTrendSymbolString)")
         glucoseTrendProvider.tintColor = tintColor
         
-        let glucoseDeltaProvider = CLKSimpleTextProvider(text: "\(data.currentGlucoseDeltaString)")
+        let glucoseDeltaProvider = CLKSimpleTextProvider(text: "\(dataModel.currentReadingDeltaString)")
         let combinedGlucoseProvider = CLKTextProvider(
             format: "%@ %@ %@",
             glucoseProvider, glucoseTrendProvider, glucoseDeltaProvider)
         
-        let timeProvider = CLKTimeTextProvider(date: data.currentGlucose.timestamp)
+        let timeProvider = CLKTimeTextProvider(date: dataModel.currentReading.timestamp)
         let timeDeltaProvider = CLKRelativeDateTextProvider(
-            date: data.currentGlucose.timestamp,
+            date: dataModel.currentReading.timestamp,
             style: .natural,
             units: .second)
         let combinedTimeProfider = CLKTextProvider(format: "%@, %@", timeProvider, timeDeltaProvider)
@@ -263,16 +234,16 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     }
     
     // Return a graphic circle template.
-    private func createGraphicCircleTemplate(forDate date: Date) -> CLKComplicationTemplate {
-        let glucoseProvider = CLKSimpleTextProvider(text: "\(data.currentGlucoseString)")
-        let glucoseTrendProvider = CLKSimpleTextProvider(text: "\(data.currentGlucoseTrendSymbolString)")
+    private func createGraphicCircleTemplate(_ dataModel: DexcomDataModelInterface) -> CLKComplicationTemplate {
+        let glucoseProvider = CLKSimpleTextProvider(text: "\(dataModel.currentReadingValueString)")
+        let glucoseTrendProvider = CLKSimpleTextProvider(text: "\(dataModel.currentReadingTrendSymbolString)")
         
         let gaugeProvider = CLKTimeIntervalGaugeProvider(
             style: .fill,
             gaugeColors: nil,
             gaugeColorLocations: nil,
-            start: data.currentGlucose.timestamp,
-            end: data.currentGlucose.timestamp.addingTimeInterval(GGOptions.timeGuageEndMinutes))
+            start: dataModel.currentReading.timestamp,
+            end: dataModel.currentReading.timestamp.addingTimeInterval(GGOptions.timeGuageEndMinutes))
                                 
         return CLKComplicationTemplateGraphicCircularOpenGaugeSimpleText(
             gaugeProvider: gaugeProvider,
@@ -281,22 +252,22 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     }
     
     // Return a large rectangular graphic template.
-    private func createGraphicRectangularTemplate(forDate date: Date) -> CLKComplicationTemplate {
-        let tintColor = data.color(forGlucose: data.currentGlucose.glucose)
+    private func createGraphicRectangularTemplate(_ dataModel: DexcomDataModelInterface) -> CLKComplicationTemplate {
+        let tintColor = dataModel.color(forGlucose: dataModel.currentReading.value)
         
-        let glucoseProvider = CLKSimpleTextProvider(text: "\(data.currentGlucoseString)")
+        let glucoseProvider = CLKSimpleTextProvider(text: "\(dataModel.currentReadingValueString)")
         glucoseProvider.tintColor = tintColor
         
-        let glucoseTrendProvider = CLKSimpleTextProvider(text: "\(data.currentGlucoseTrendSymbolString)")
+        let glucoseTrendProvider = CLKSimpleTextProvider(text: "\(dataModel.currentReadingTrendSymbolString)")
         glucoseTrendProvider.tintColor = tintColor
         
-        let glucoseDeltaProvider = CLKSimpleTextProvider(text: "\(data.currentGlucoseDeltaString)")
+        let glucoseDeltaProvider = CLKSimpleTextProvider(text: "\(dataModel.currentReadingDeltaString)")
         let combinedGlucoseProvider = CLKTextProvider(format: "%@ %@ %@", glucoseProvider, glucoseTrendProvider, glucoseDeltaProvider)
         
-        let timeProvider = CLKTimeTextProvider(date: data.currentGlucose.timestamp)
+        let timeProvider = CLKTimeTextProvider(date: dataModel.currentReading.timestamp)
         
         let timeDeltaProvider = CLKRelativeDateTextProvider(
-            date: data.currentGlucose.timestamp,
+            date: dataModel.currentReading.timestamp,
             style: .natural,
             units: .second)
         
@@ -307,12 +278,12 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     }
     
     // Return a circular template with text that wraps around the top of the watch's bezel.
-    private func createGraphicBezelTemplate(forDate date: Date) -> CLKComplicationTemplate {
+    private func createGraphicBezelTemplate(_ dataModel: DexcomDataModelInterface) -> CLKComplicationTemplate {
         
-        let glucoseProvider = CLKSimpleTextProvider(text: "\(data.currentGlucoseString)")
-        let glucoseTrendProvider = CLKSimpleTextProvider(text: "\(data.currentGlucoseTrendSymbolString)")
+        let glucoseProvider = CLKSimpleTextProvider(text: "\(dataModel.currentReadingValueString)")
+        let glucoseTrendProvider = CLKSimpleTextProvider(text: "\(dataModel.currentReadingTrendSymbolString)")
         
-        let glucoseDeltaProvider = CLKSimpleTextProvider(text: "\(data.currentGlucoseDeltaString)")
+        let glucoseDeltaProvider = CLKSimpleTextProvider(text: "\(dataModel.currentReadingDeltaString)")
         let combinedGlucoseProvider = CLKTextProvider(format: "%@ %@", glucoseProvider, glucoseDeltaProvider)
                 
         let circle = CLKComplicationTemplateGraphicCircularStackText(
@@ -320,10 +291,10 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             line2TextProvider: combinedGlucoseProvider)
         
         let timeDeltaProvider = CLKRelativeDateTextProvider(
-            date: data.currentGlucose.timestamp,
+            date: dataModel.currentReading.timestamp,
             style: .natural,
             units: .second)
-        let timeProvider = CLKTimeTextProvider(date: data.currentGlucose.timestamp)
+        let timeProvider = CLKTimeTextProvider(date: dataModel.currentReading.timestamp)
         
         let combinedTimeProvider = CLKTextProvider(format: "%@, %@", timeProvider, timeDeltaProvider)
                 
@@ -334,16 +305,16 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     }
     
     // Returns an extra large graphic template.
-    private func createGraphicExtraLargeTemplate(forDate date: Date) -> CLKComplicationTemplate {
-        let glucoseProvider = CLKSimpleTextProvider(text: "\(data.currentGlucoseString)")
-        let glucoseTrendProvider = CLKSimpleTextProvider(text: "\(data.currentGlucoseTrendSymbolString)")
+    private func createGraphicExtraLargeTemplate(_ dataModel: DexcomDataModelInterface) -> CLKComplicationTemplate {
+        let glucoseProvider = CLKSimpleTextProvider(text: "\(dataModel.currentReadingValueString)")
+        let glucoseTrendProvider = CLKSimpleTextProvider(text: "\(dataModel.currentReadingTrendSymbolString)")
                 
         let gaugeProvider = CLKTimeIntervalGaugeProvider(
             style: .fill,
             gaugeColors: nil,
             gaugeColorLocations: nil,
-            start: data.currentGlucose.timestamp,
-            end: data.currentGlucose.timestamp.addingTimeInterval(GGOptions.timeGuageEndMinutes))
+            start: dataModel.currentReading.timestamp,
+            end: dataModel.currentReading.timestamp.addingTimeInterval(GGOptions.timeGuageEndMinutes))
         
         return CLKComplicationTemplateGraphicExtraLargeCircularOpenGaugeSimpleText(
             gaugeProvider: gaugeProvider,

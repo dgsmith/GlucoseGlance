@@ -9,23 +9,81 @@ import SwiftUI
 import Combine
 import ClockKit
 import os
-import ShareClient
 
-// The data model for the Coffee Tracker app.
-class DexcomData: ObservableObject {
+protocol DexcomDataModelInterface {
+    var currentReading: GlucoseReading { get }
+    
+    var currentReadingValueString: String { get }
+    var currentReadingTrendSymbolString: String { get }
+    
+    var currentReadingDeltaString: String { get }
+    
+    func color(forGlucose glucose: Int) -> UIColor
+}
+
+struct ExampleDexcomData: DexcomDataModelInterface {
+    // A number formatter that limits numbers
+    // to three significant digits.
+    let numberFormatter: NumberFormatter = {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.maximumSignificantDigits = 3
+        formatter.minimumSignificantDigits = 1
+        return formatter
+    }()
+    
+    let currentReading: GlucoseReading
+    
+    var currentReadingValueString: String {
+        let value = currentReading.value
+        guard let result = numberFormatter.string(from: NSNumber(value: value)) else {
+            fatalError("*** Unable to create a string for \(currentReading.value) ***")
+        }
+        
+        return result
+    }
+    
+    var currentReadingTrendSymbolString: String {
+        return currentReading.trend.symbol
+    }
+    
+    var currentReadingDeltaString: String {
+        return "+1"
+    }
+    
+    init(timestamp: Date) {
+        currentReading = GlucoseReading(value: 100,
+                                        trend: .flat,
+                                        timestamp: timestamp.advanced(by: -1 * 2.0 * 60.0))
+    }
+    
+    func color(forGlucose glucose: Int) -> UIColor {
+        if glucose < GGOptions.redThreshold {
+            return .red
+        }
+        
+        if glucose > GGOptions.yellowThreshold {
+            return .yellow
+        }
+        
+        return .green
+    }
+}
+
+// The data model for the Glucose Glance app.
+class DexcomData: ObservableObject, DexcomDataModelInterface {
     
     let logger = Logger(
-        subsystem: "me.graysonsmith.GlucoseGlance.watchkitapp.watchkitextension.CoffeeData",
+        subsystem: "me.graysonsmith.GlucoseGlance.watchkitapp.watchkitextension.DexcomData",
         category: "Model")
     
     // The data model needs to be accessed both from the app extension
     // and from the complication controller.
     static let shared = DexcomData()
     
-    lazy var client = ShareClient(
-        username: GGOptions.username,
-        password: GGOptions.password,
-        shareServer: GGOptions.dexcomServer)
+    lazy var provider = DexcomProvider(username: GGOptions.username,
+                                       password: GGOptions.password,
+                                       shareServer: GGOptions.dexcomServer)
     
     // A number formatter that limits numbers
     // to three significant digits.
@@ -41,12 +99,10 @@ class DexcomData: ObservableObject {
     private var background = DispatchQueue(
         label: "Background Queue",
         qos: .userInitiated)
-    
-    private var futureLoadScheduled: Bool = false
-        
-    @Published public var currentGlucoseMeasurements = [ShareGlucose]() {
+            
+    @Published public var currentGlucoseReadings = [GlucoseReading]() {
         didSet {
-            logger.debug("A value has been assigned to the current glucose measurements property.")
+            logger.debug("A value has been assigned to the current glucose readings property.")
             
             // Update any complications on active watch faces.
             let server = CLKComplicationServer.sharedInstance()
@@ -60,57 +116,53 @@ class DexcomData: ObservableObject {
     }
     
     // Use this value to determine whether you have changes that can be saved to disk.
-    private var savedGlucose = [ShareGlucose]()
+    private var savedGlucoseReadings = [GlucoseReading]()
     
-    public var currentGlucose: ShareGlucose {
-        return currentGlucoseMeasurements.first ?? ShareGlucose(glucose: 0, trend: 0, timestamp: Date())
+    public var currentReading: GlucoseReading {
+        return currentGlucoseReadings.first ?? GlucoseReading(value: 0, trend: .unknown, timestamp: Date.distantPast)
     }
     
-    public var currentGlucoseDelta: Double? {
-        if currentGlucoseMeasurements.count <= 1 {
+    public var currentReadingDelta: Double? {
+        if currentGlucoseReadings.count <= 1 {
             return 0
         }
         
-        let latest = currentGlucoseMeasurements[0]
-        let nextLatest = currentGlucoseMeasurements[1]
+        let latest = currentGlucoseReadings[0]
+        let nextLatest = currentGlucoseReadings[1]
         
         if latest.timestamp.distance(to: nextLatest.timestamp) > 5.5 * 60.0 {
             return nil
         }
         
-        return Double(latest.glucose) - Double(nextLatest.glucose)
+        return Double(latest.value) - Double(nextLatest.value)
     }
     
-    public var currentGlucoseString: String {
-        guard let result = numberFormatter.string(from: NSNumber(value: currentGlucose.glucose)) else {
-            fatalError("*** Unable to create a string for \(currentGlucose.glucose) ***")
-        }
-        
-        return result
-    }
-    
-    public var currentGlucoseTrendSymbolString: String {
-        guard let result = currentGlucose.trendType?.symbol else {
-            return "-"
-        }
-        
-        return result
-    }
-    
-    public var currentGlucoseDeltaString: String {
-        guard let currentGlucoseDelta = currentGlucoseDelta else {
+    public var currentReadingDeltaString: String {
+        guard let currentGlucoseDelta = currentReadingDelta else {
             return ""
         }
         
         let prefix = currentGlucoseDelta >= 0 ? "+" : ""
         guard let result = numberFormatter.string(from: NSNumber(value: currentGlucoseDelta)) else {
-            fatalError("*** Unable to create a string for \(currentGlucose.glucose) ***")
+            fatalError("*** Unable to create a string for \(currentReading.value) ***")
         }
         
         return "\(prefix)\(result)"
     }
+    
+    public var currentReadingValueString: String {
+        guard let result = numberFormatter.string(from: NSNumber(value: currentReading.value)) else {
+            fatalError("*** Unable to create a string for \(currentReading.value) ***")
+        }
+        
+        return result
+    }
+    
+    public var currentReadingTrendSymbolString: String {
+        return currentReading.trend.symbol
+    }
                     
-    public func color(forGlucose glucose: UInt16) -> UIColor {
+    public func color(forGlucose glucose: Int) -> UIColor {
         if glucose < GGOptions.redThreshold {
             return .red
         }
@@ -132,10 +184,10 @@ class DexcomData: ObservableObject {
         load()
     }
         
-    private func saveGlucoseMeasurements() -> Data? {
+    private func saveGlucoseReadings() -> Data? {
         // Don't save the data if there haven't been any changes.
-        if currentGlucoseMeasurements == savedGlucose {
-            logger.debug("The glucose measurements hasn't changed. No need to save.")
+        if currentGlucoseReadings == savedGlucoseReadings {
+            logger.debug("The glucose readings haven't changed. No need to save.")
             return nil
         }
         
@@ -146,8 +198,9 @@ class DexcomData: ObservableObject {
         let data: Data
         
         do {
-            // Encode the currentDrinks array.
-            data = try encoder.encode(currentGlucoseMeasurements)
+            // Encode the currentGlucoseReadings array.
+            data = try encoder.encode(currentGlucoseReadings)
+            
         } catch {
             logger.error("An error occurred while encoding the data: \(error.localizedDescription)")
             return nil
@@ -156,13 +209,12 @@ class DexcomData: ObservableObject {
         return data
     }
     
-    // Begin saving the drink data to disk.
+    // Begin saving the glucose readings to disk.
     private func save() {
         
-        let glucoseData = saveGlucoseMeasurements()
+        let glucoseData = saveGlucoseReadings()
         
-        // nothing to do
-        if glucoseData == nil {
+        guard let glucoseData = glucoseData else {
             return
         }
         
@@ -170,14 +222,13 @@ class DexcomData: ObservableObject {
         let saveAction = { [unowned self] in
             do {
                 // Write the data to disk
-                if let glucoseData = glucoseData {
-                    try glucoseData.write(to: self.getGlucoseDataURL(), options: [.atomic])
-                }
+                try glucoseData.write(to: self.getGlucoseReadingsDataURL(), options: [.atomic])
     
                 // Update the saved value.
-                self.savedGlucose = currentGlucoseMeasurements
+                self.savedGlucoseReadings = currentGlucoseReadings
                 
                 self.logger.debug("Saved!")
+                
             } catch {
                 self.logger.error("An error occurred while saving the data: \(error.localizedDescription)")
             }
@@ -202,20 +253,20 @@ class DexcomData: ObservableObject {
         background.async { [unowned self] in
             logger.debug("Loading the model.")
         
-            var glucoses: [ShareGlucose]
+            var readingsFromDisk: [GlucoseReading]
             
             do {
                 // Decode the data.
                 let decoder = PropertyListDecoder()
-                let glucoseData = try Data(contentsOf: self.getGlucoseDataURL())
+                let readingsData = try Data(contentsOf: self.getGlucoseReadingsDataURL())
                 
-                glucoses = try decoder.decode([ShareGlucose].self, from: glucoseData)
+                readingsFromDisk = try decoder.decode([GlucoseReading].self, from: readingsData)
                 
                 logger.debug("Data loaded from disk")
                 
             } catch CocoaError.fileReadNoSuchFile {
                 logger.debug("No file found--creating an empty drink list.")
-                glucoses = []
+                readingsFromDisk = []
                 
             } catch {
                 fatalError("*** An unexpected error occurred while loading the drink list: \(error.localizedDescription) ***")
@@ -224,101 +275,51 @@ class DexcomData: ObservableObject {
             // Update the entires on the main queue.
             DispatchQueue.main.async { [unowned self] in
                 
-                savedGlucose = glucoses
+                savedGlucoseReadings = readingsFromDisk
                 
                 // Filter the drinks.
-                currentGlucoseMeasurements = filterGlucoseMeasurements(glucoseMeasurements: glucoses)
+                currentGlucoseReadings = filterGlucoseReadings(readingsFromDisk)
                                 
-                self.loadNewDexcomData()
+                asyncDetached {
+                    await self.checkForNewReadings()
+                }
             }
         }
     }
     
-    // Completion handler will always return true -- in order to schedule another background task
-    public func loadNewDexcomData(completionHandler: @escaping (Bool) -> Void = { _ in }) {
-        logger.debug("Loading Data from Dexcom")
+    public func checkForNewReadings() async -> Bool {
+        logger.debug("Checking for new readings from Dexcom")
         
-        let timeToCheck = currentGlucose.timestamp.addingTimeInterval(GGOptions.automaticFetchInterval)
-        let now = Date()
-        if now < timeToCheck {
-            logger.debug("Not enough time elapsed (\(Date().distance(to: timeToCheck)))")
+        do {
+            let latestReadings = try await self.provider.fetchLatestReadings(GGOptions.dexcomFetchCount)
             
-            if !futureLoadScheduled {
-                let secondsFromNow = now.distance(to: timeToCheck)
-                self.logger.debug("Future load scheduled.")
-                futureLoadScheduled = true
-                DispatchQueue.main.asyncAfter(
-                    deadline: .now() + secondsFromNow,
-                    execute:
-                        { [weak self] in
-                            self?.futureLoadScheduled = false
-                            self?.loadNewDexcomData()
-                        }
-                )
-            } else {
-                self.logger.debug("Future load already in progress.")
-            }
-            completionHandler(true)
-            return
-        }
-        
-        self.client.fetchLast(GGOptions.dexcomFetchCount) { (error, newGlucose) in
-            if let error = error {
-                self.logger.debug("Got fetch error from Dexcom: \(error)")
-                completionHandler(true)
-                return
-            }
-            
-            guard let newGlucose = newGlucose else {
-                completionHandler(true)
-                return
-            }
-            
-            DispatchQueue.main.async {
+            await MainActor.run {
                 // Get a copy of the current glucose data.
-                let oldGlucose = self.currentGlucoseMeasurements
+                let currentReadings = self.currentGlucoseReadings
                 
                 // Combine old and new together
-                let newNewGlucose = Set(oldGlucose).union(Set(newGlucose)).sorted { lhs, rhs in
+                let newestReadings = Set(currentReadings).union(Set(latestReadings)).sorted { lhs, rhs in
                     lhs.timestamp.compare(rhs.timestamp) == .orderedDescending
                 }
                                          
                 // Only update if there have been changes.
-                if self.currentGlucoseMeasurements != newNewGlucose {
-                    self.currentGlucoseMeasurements = newNewGlucose
-                    
-                    // Schedule another read!
-                    if !self.futureLoadScheduled {
-                        let futureLoadTime = self.currentGlucoseMeasurements.first!.timestamp.addingTimeInterval(GGOptions.automaticFetchInterval)
-                        let secondsFromNow = Date().distance(to: futureLoadTime)
-                        if secondsFromNow > 0 {
-                            self.logger.debug("Future load scheduled.")
-                            self.futureLoadScheduled = true
-                            DispatchQueue.main.asyncAfter(
-                                deadline: .now() + secondsFromNow,
-                                execute:
-                                    { [weak self] in
-                                        self?.futureLoadScheduled = false
-                                        self?.loadNewDexcomData()
-                                    }
-                            )
-                        } else {
-                            self.logger.debug("Invalide future load time (\(secondsFromNow)).")
-                        }
-                    } else {
-                        self.logger.debug("Future load already in progress.")
-                    }
+                if self.currentGlucoseReadings == newestReadings {
+                    logger.debug("No new readings found.")
                 } else {
-                    self.logger.debug("The glucose measurements hasn't changed.")
+                    self.currentGlucoseReadings = newestReadings
                 }
-                
-                completionHandler(true)
             }
+            
+            return true
+    
+        } catch {
+            self.logger.debug("Got fetch error from Dexcom: \(error.localizedDescription)")
+            return false
         }
     }
         
     // Returns the URL for the plist file that stores the glucose data.
-    private func getGlucoseDataURL() throws -> URL {
+    private func getGlucoseReadingsDataURL() throws -> URL {
         // Get the URL for the app's document directory.
         let fileManager = FileManager.default
         let documentDirectory = try fileManager.url(for: .documentDirectory,
@@ -331,18 +332,18 @@ class DexcomData: ObservableObject {
     }
 }
 
-// Filter array to only the glucose measurements in the last 24 hours.
-private func filterGlucoseMeasurements(glucoseMeasurements: [ShareGlucose]) -> [ShareGlucose] {
+// Filter array to only the glucose readings in the last 24 hours.
+private func filterGlucoseReadings(_ readings: [GlucoseReading]) -> [GlucoseReading] {
     // The current date and time.
     let endDate = Date()
     
     // The date and time 24 hours ago.
     let startDate = endDate.addingTimeInterval(-24.0 * 60.0 * 60.0)
     
-    // Return an array of glucose measurements with a date parameter between
+    // Return an array of glucose readings with a date parameter between
     // the start and end dates.
-    return glucoseMeasurements.filter { (glucose) -> Bool in
-        (startDate.compare(glucose.timestamp) != .orderedDescending) &&
-            (endDate.compare(glucose.timestamp) != .orderedAscending)
+    return readings.filter { (reading) -> Bool in
+        (startDate.compare(reading.timestamp) != .orderedDescending) &&
+            (endDate.compare(reading.timestamp) != .orderedAscending)
     }
 }

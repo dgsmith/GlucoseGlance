@@ -2,7 +2,7 @@
 See LICENSE folder for this sample’s licensing information.
 
 Abstract:
-A wrapper view that instantiates the coffee tracker view and the data for the hosting controller.
+A wrapper view that instantiates the glucose readings view and the data for the hosting controller.
 */
 
 import SwiftUI
@@ -12,18 +12,18 @@ import os
 struct ContentView: View {
     
     let logger = Logger(
-        subsystem: "me.graysonsmith.GlucoseGlance.watchkitapp.watchkitextension.ContengView",
+        subsystem: "me.graysonsmith.GlucoseGlance.watchkitapp.watchkitextension.ContentView",
         category: "Root View")
     
     @Environment(\.scenePhase) private var scenePhase
     
     // Access the shared model object.
-    let data = DexcomData.shared
+    let dataModel = DexcomData.shared
     
     // Create the main view, and pass the model.
     var body: some View {
-        GlucoseGlanceView()
-            .environmentObject(data)
+        GlucoseReadingsView()
+            .environmentObject(dataModel)
             .onChange(of: scenePhase) { (phase) in
                 switch phase {
                 
@@ -33,8 +33,9 @@ struct ContentView: View {
                 case .active:
                     logger.debug("Scene became active.")
                     
-                    let model = DexcomData.shared
-                    model.loadNewDexcomData()
+                    async {
+                        await dataModel.checkForNewReadings()
+                    }
                     
                 case .background:
                     logger.debug("Scene moved to the background.")

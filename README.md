@@ -4,12 +4,7 @@ View glucose readings from Dexcom right on your Apple Watch (complications + app
 **This app only communicates from Dexcom Share, NOT from your Dexcom transmitter or app.**
 
 # Setup
-This project uses a Cartfile, so firstly make sure you have Carthage installed and run the following,
-```sh
-./Scripts/carthage.sh update --use-xcframeworks
-```
-
-Next, before building in Xcode, see the `GlucoseGlance WatchKit Extension/GGOptions.swift` file to input your Dexcom Share username and password as well as modifying any other default parameters, only username and password are required.
+Before building in Xcode, see the `GlucoseGlance WatchKit Extension/GGOptions.swift` file to input your Dexcom Share username and password as well as modifying any other default parameters, only username and password are required.
 ```swift
 public struct GGOptions {
     // MARK: Setup Options
@@ -23,7 +18,7 @@ public struct GGOptions {
 }
 ```
 
-Lastly, build the app through Xcode!
+Now you can build the app through Xcode!
 
 # Caveats
 Complications on the Apple Watch face aren't allowed to update as much as you will probably want (~5 minutes), they, at max, can update once every 15 minutes. If you notice the complication is out of date, tapping on the complication and loading the app will allow the app to quickly update its data.

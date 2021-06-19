@@ -31,8 +31,10 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                 
                 // Check for updates from Dexcom.
                 let model = DexcomData.shared
-                                
-                model.loadNewDexcomData { [unowned self] (success) in
+                
+                async {
+                    let success = await model.checkForNewReadings()
+                    
                     if success {
                         // Schedule the next background update.
                         scheduleBackgroundRefreshTasks()
@@ -42,7 +44,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                     // Mark the task as ended, and request an updated snapshot, if necessary.
                     backgroundTask.setTaskCompletedWithSnapshot(success)
                 }
-                
+                                                
             case let snapshotTask as WKSnapshotRefreshBackgroundTask:
                 snapshotTask.setTaskCompleted(restoredDefaultState: true, estimatedSnapshotExpiration: Date.distantFuture, userInfo: nil)
             case let connectivityTask as WKWatchConnectivityRefreshBackgroundTask:
