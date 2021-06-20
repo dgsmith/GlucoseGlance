@@ -17,6 +17,9 @@
 		569A3DB2267E88AE00A68103 /* DexcomData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56A8C1772656068300E7C8C8 /* DexcomData.swift */; };
 		569A3DB3267E88B200A68103 /* GlucoseReading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 563A50B7267C426E00FB8083 /* GlucoseReading.swift */; };
 		569A3DB4267E88B500A68103 /* DexcomProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 563A50C0267C455500FB8083 /* DexcomProvider.swift */; };
+		569A3DB6267E8FCA00A68103 /* MockDexcomProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569A3DB5267E8FCA00A68103 /* MockDexcomProvider.swift */; };
+		569A3DB7267E9F5400A68103 /* MockDexcomProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569A3DB5267E8FCA00A68103 /* MockDexcomProvider.swift */; };
+		569A3DB8267EA17900A68103 /* MockDexcomProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 569A3DB5267E8FCA00A68103 /* MockDexcomProvider.swift */; };
 		56A3DD152650651400C7A3E4 /* GlucoseGlance WatchKit App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 56A3DD142650651400C7A3E4 /* GlucoseGlance WatchKit App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		56A3DD1A2650651800C7A3E4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56A3DD192650651800C7A3E4 /* Assets.xcassets */; };
 		56A3DD212650651800C7A3E4 /* GlucoseGlance WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 56A3DD202650651800C7A3E4 /* GlucoseGlance WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -103,6 +106,7 @@
 		563A50B7267C426E00FB8083 /* GlucoseReading.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseReading.swift; sourceTree = "<group>"; };
 		563A50C0267C455500FB8083 /* DexcomProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DexcomProvider.swift; sourceTree = "<group>"; };
 		569A3DAE267D558F00A68103 /* GlucoseGlance-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GlucoseGlance-Info.plist"; sourceTree = "<group>"; };
+		569A3DB5267E8FCA00A68103 /* MockDexcomProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDexcomProvider.swift; sourceTree = "<group>"; };
 		56A3DD102650651400C7A3E4 /* GlucoseGlance.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GlucoseGlance.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		56A3DD142650651400C7A3E4 /* GlucoseGlance WatchKit App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "GlucoseGlance WatchKit App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		56A3DD192650651800C7A3E4 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -215,6 +219,7 @@
 		56A3DD3D2650651A00C7A3E4 /* GlucoseGlanceTests */ = {
 			isa = PBXGroup;
 			children = (
+				569A3DB5267E8FCA00A68103 /* MockDexcomProvider.swift */,
 				56A3DD3E2650651A00C7A3E4 /* GlucoseGlanceTests.swift */,
 				56A3DD402650651A00C7A3E4 /* Info.plist */,
 			);
@@ -348,7 +353,6 @@
 					};
 					56A3DD392650651900C7A3E4 = {
 						CreatedOnToolsVersion = 12.5;
-						TestTargetID = 56A3DD1F2650651800C7A3E4;
 					};
 					56A3DD442650651A00C7A3E4 = {
 						CreatedOnToolsVersion = 12.5;
@@ -424,6 +428,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				569A3DB8267EA17900A68103 /* MockDexcomProvider.swift in Sources */,
 				56A8C18426560ADE00E7C8C8 /* GGOptions.swift in Sources */,
 				563A50B8267C426E00FB8083 /* GlucoseReading.swift in Sources */,
 				56A8C17F2656068400E7C8C8 /* GlucoseReadingsView.swift in Sources */,
@@ -440,6 +445,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				569A3DB6267E8FCA00A68103 /* MockDexcomProvider.swift in Sources */,
 				569A3DAF267E88AA00A68103 /* GGOptions.swift in Sources */,
 				569A3DB1267E88AD00A68103 /* DexcomData.swift in Sources */,
 				56A3DD3F2650651A00C7A3E4 /* GlucoseGlanceTests.swift in Sources */,
@@ -452,6 +458,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				569A3DB7267E9F5400A68103 /* MockDexcomProvider.swift in Sources */,
 				569A3DB4267E88B500A68103 /* DexcomProvider.swift in Sources */,
 				569A3DB0267E88AA00A68103 /* GGOptions.swift in Sources */,
 				56A3DD4A2650651A00C7A3E4 /* GlucoseGlanceUITests.swift in Sources */,
@@ -728,7 +735,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Z6T84878UQ;
 				INFOPLIST_FILE = GlucoseGlanceTests/Info.plist;
@@ -742,7 +748,6 @@
 				SDKROOT = watchos;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GlucoseGlance WatchKit Extension.appex/GlucoseGlance WatchKit Extension";
 				WATCHOS_DEPLOYMENT_TARGET = 8.0;
 			};
 			name = Debug;
@@ -751,7 +756,6 @@
 			isa = XCBuildConfiguration;
 			buildSettings = {
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
-				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = Z6T84878UQ;
 				INFOPLIST_FILE = GlucoseGlanceTests/Info.plist;
@@ -765,7 +769,6 @@
 				SDKROOT = watchos;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
-				TEST_HOST = "$(BUILT_PRODUCTS_DIR)/GlucoseGlance WatchKit Extension.appex/GlucoseGlance WatchKit Extension";
 				WATCHOS_DEPLOYMENT_TARGET = 8.0;
 			};
 			name = Release;
@@ -783,6 +786,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = me.graysonsmith.GlucoseGlanceUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = watchos;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;
@@ -804,6 +808,7 @@
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = me.graysonsmith.GlucoseGlanceUITests;
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE = "";
 				SDKROOT = watchos;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = 4;

@@ -16,6 +16,10 @@ public struct GlucoseReading: Codable, Hashable, Comparable {
         return lhs.timestamp < rhs.timestamp
     }
     
+    public init() {
+        self.init(value: 100, trend: .unknown, timestamp: .distantPast)
+    }
+    
     public init(value: Int, trend: GlucoseTrend, timestamp: Date) {
         self.value = value
         self.trend = trend

@@ -12,6 +12,7 @@ import os
 
 protocol DexcomDataModelInterface {
     var currentReading: GlucoseReading { get }
+    var isCurrentReadingTooOld: Bool { get }
     
     var currentReadingValueString: String { get }
     var currentReadingTrendSymbolString: String { get }
@@ -33,6 +34,8 @@ struct ExampleDexcomData: DexcomDataModelInterface {
     }()
     
     let currentReading: GlucoseReading
+    
+    let isCurrentReadingTooOld: Bool = false
     
     var currentReadingValueString: String {
         let value = currentReading.value
@@ -70,24 +73,26 @@ struct ExampleDexcomData: DexcomDataModelInterface {
     }
 }
 
+private func UITesting() -> Bool {
+    return ProcessInfo.processInfo.arguments.contains("UI-TESTING")
+}
+
 // The data model for the Glucose Glance app.
 class DexcomData: ObservableObject, DexcomDataModelInterface {
     
-    let logger = Logger(
+    private let logger = Logger(
         subsystem: "me.graysonsmith.GlucoseGlance.watchkitapp.watchkitextension.DexcomData",
         category: "Model")
     
     // The data model needs to be accessed both from the app extension
     // and from the complication controller.
-    static let shared = DexcomData()
+    static let shared = UITesting() ? DexcomData(provider: MockDexcomProvider()) : DexcomData()
     
-    lazy var provider = DexcomProvider(username: GGOptions.username,
-                                       password: GGOptions.password,
-                                       shareServer: GGOptions.dexcomServer)
+    private let provider: DexcomProvidable
     
     // A number formatter that limits numbers
     // to three significant digits.
-    lazy var numberFormatter: NumberFormatter = {
+    private lazy var numberFormatter: NumberFormatter = {
         let formatter = NumberFormatter()
         formatter.numberStyle = .decimal
         formatter.maximumSignificantDigits = 3
@@ -102,6 +107,10 @@ class DexcomData: ObservableObject, DexcomDataModelInterface {
             
     @Published public var currentGlucoseReadings = [GlucoseReading]() {
         didSet {
+            guard !UITesting() else {
+                return
+            }
+            
             logger.debug("A value has been assigned to the current glucose readings property.")
             
             // Update any complications on active watch faces.
@@ -119,18 +128,26 @@ class DexcomData: ObservableObject, DexcomDataModelInterface {
     private var savedGlucoseReadings = [GlucoseReading]()
     
     public var currentReading: GlucoseReading {
-        return currentGlucoseReadings.first ?? GlucoseReading(value: 0, trend: .unknown, timestamp: Date.distantPast)
+        return currentGlucoseReadings.first ?? GlucoseReading()
+    }
+    
+    public var isCurrentReadingTooOld: Bool {
+        if currentReading.timestamp.distance(to: .now) > GGOptions.readingOldnessInterval {
+            return true
+        }
+        
+        return false
     }
     
     public var currentReadingDelta: Double? {
         if currentGlucoseReadings.count <= 1 {
-            return 0
+            return nil
         }
         
         let latest = currentGlucoseReadings[0]
         let nextLatest = currentGlucoseReadings[1]
         
-        if latest.timestamp.distance(to: nextLatest.timestamp) > 5.5 * 60.0 {
+        if nextLatest.timestamp.distance(to: latest.timestamp) > 5.5 * 60.0 {
             return nil
         }
         
@@ -178,7 +195,8 @@ class DexcomData: ObservableObject, DexcomDataModelInterface {
     
     // The model's initializer. Do not call this method.
     // Use the shared instance instead.
-    private init() {
+    public init(provider: DexcomProvidable = DexcomProvider.shared) {
+        self.provider = provider
         
         // Begin loading the data from disk.
         load()
@@ -211,6 +229,9 @@ class DexcomData: ObservableObject, DexcomDataModelInterface {
     
     // Begin saving the glucose readings to disk.
     private func save() {
+        guard !UITesting() else {
+            return
+        }
         
         let glucoseData = saveGlucoseReadings()
         
@@ -240,8 +261,12 @@ class DexcomData: ObservableObject, DexcomDataModelInterface {
             saveAction()
         } else {
             // Otherwise save the data on a background queue.
-            background.async { [unowned self] in
-                logger.debug("Asynchronously saving the model on a background thread.")
+            background.async { [weak self] in
+                guard let self = self else {
+                    return
+                }
+                
+                self.logger.debug("Asynchronously saving the model on a background thread.")
                 saveAction()
             }
         }
@@ -249,9 +274,17 @@ class DexcomData: ObservableObject, DexcomDataModelInterface {
     
     // Begin loading the data from disk.
     private func load() {
+        guard !UITesting() else {
+            return
+        }
+        
         // Read the data from a background queue.
-        background.async { [unowned self] in
-            logger.debug("Loading the model.")
+        background.async { [weak self] in
+            guard let self = self else {
+                return
+            }
+            
+            self.logger.debug("Loading the model.")
         
             var readingsFromDisk: [GlucoseReading]
             
@@ -262,10 +295,10 @@ class DexcomData: ObservableObject, DexcomDataModelInterface {
                 
                 readingsFromDisk = try decoder.decode([GlucoseReading].self, from: readingsData)
                 
-                logger.debug("Data loaded from disk")
+                self.logger.debug("Data loaded from disk")
                 
             } catch CocoaError.fileReadNoSuchFile {
-                logger.debug("No file found--creating an empty drink list.")
+                self.logger.debug("No file found--creating an empty drink list.")
                 readingsFromDisk = []
                 
             } catch {
@@ -273,12 +306,15 @@ class DexcomData: ObservableObject, DexcomDataModelInterface {
             }
             
             // Update the entires on the main queue.
-            DispatchQueue.main.async { [unowned self] in
+            DispatchQueue.main.async { [weak self] in
+                guard let self = self else {
+                    return
+                }
                 
-                savedGlucoseReadings = readingsFromDisk
+                self.savedGlucoseReadings = readingsFromDisk
                 
                 // Filter the drinks.
-                currentGlucoseReadings = filterGlucoseReadings(readingsFromDisk)
+                self.currentGlucoseReadings = filterGlucoseReadings(readingsFromDisk)
                                 
                 asyncDetached {
                     await self.checkForNewReadings()

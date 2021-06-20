@@ -22,26 +22,38 @@ struct GlucoseReadingsView: View {
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .foregroundColor(colorForGlucoseLevel())
+                    .accessibilityIdentifier("currentReadingValueString")
                 Spacer().overlay(
                     HStack {
                         Text(dataModel.currentReadingTrendSymbolString)
                             .font(.title)
                             .fontWeight(.bold)
                             .foregroundColor(colorForGlucoseLevel())
+                            .accessibilityIdentifier("currentReadingTrendSymbolString")
                         Text(dataModel.currentReadingDeltaString)
                             .font(.callout)
+                            .accessibilityIdentifier("currentReadingDeltaString")
                     }
                 )
             }
             Text(dataModel.currentReading.timestamp, style: .time)
+                .accessibilityIdentifier("currentReading.timestamp")
                         
             Divider()
             Spacer()
                         
             Text("Last Update")
                 .font(.headline)
-            Text(dataModel.currentReading.timestamp, style: .relative)
-                .font(.footnote)
+            if dataModel.isCurrentReadingTooOld {
+                Text("OLD")
+                    .foregroundColor(.red)
+                    .accessibilityIdentifier("isCurrentReadingTooOld")
+            } else {
+                Text(dataModel.currentReading.timestamp, style: .relative)
+                    .font(.footnote)
+                    .accessibilityIdentifier("isCurrentReadingTooOld")
+            }
+            
                         
             HStack {
                 Spacer()
@@ -55,6 +67,7 @@ struct GlucoseReadingsView: View {
                         .font(.title)
                 }
                 .buttonStyle(.plain)
+                .accessibilityIdentifier("checkForNewReadings")
             }
             .padding(.horizontal, 5)
             .padding(.bottom, 5)

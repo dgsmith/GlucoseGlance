@@ -54,9 +54,15 @@ private let dexcomLoginPath = "/ShareWebServices/Services/General/LoginPublisher
 private let dexcomLatestGlucosePath = "/ShareWebServices/Services/Publisher/ReadPublisherLatestGlucoseValues"
 private let maxReauthAttempts = 2
 
+protocol DexcomProvidable {
+    func authenticate() async throws
+    func fetchLatestReadings(_ numReadings: Int) async throws -> [GlucoseReading]
+}
 
-actor DexcomProvider {
-    private let logger = Logger(subsystem: "me.graysonsmith.test.DataStore", category: "DataStore")
+actor DexcomProvider: DexcomProvidable {
+    private let logger = Logger(
+        subsystem: "me.graysonsmith.GlucoseGlance.watchkitapp.watchkitextension.DexcomProvider",
+        category: "DexcomProvider")
     
     private var token: String?
     
@@ -67,6 +73,10 @@ actor DexcomProvider {
     private var lastFetchedReadings: [GlucoseReading] = []
     private var lastFetch: Date = Date.distantPast
     private let allowedFetchInterval: TimeInterval = GGOptions.dexcomFetchLimit
+    
+    public static let shared = DexcomProvider(username: GGOptions.username,
+                                              password: GGOptions.password,
+                                              shareServer: GGOptions.dexcomServer)
     
     public init(username: String, password: String, shareServer: KnownShareServer) {
         self.username = username

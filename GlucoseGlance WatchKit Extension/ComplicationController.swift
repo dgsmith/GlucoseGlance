@@ -110,10 +110,16 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             glucoseProvider, glucoseTrendProvider)
         combinedGlucoseProvider.tintColor = dataModel.color(forGlucose: dataModel.currentReading.value)
         
-        let timeDeltaProvider = CLKRelativeDateTextProvider(
-            date: dataModel.currentReading.timestamp,
-            style: .natural,
-            units: .second)
+        let timeDeltaProvider: CLKTextProvider
+        if dataModel.isCurrentReadingTooOld {
+            timeDeltaProvider = CLKSimpleTextProvider(text: "OLD")
+            timeDeltaProvider.tintColor = .red
+        } else {
+            timeDeltaProvider = CLKRelativeDateTextProvider(
+                date: dataModel.currentReading.timestamp,
+                style: .natural,
+                units: .second)
+        }
                 
         // Create the template using the providers.
         return CLKComplicationTemplateModularSmallStackText(line1TextProvider: combinedGlucoseProvider,
@@ -135,10 +141,17 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             format: "%@ %@ %@",
             glucoseProvider, glucoseTrendProvider, glucoseDeltaProvider)
         
-        let timeDeltaProvider = CLKRelativeDateTextProvider(
-            date: dataModel.currentReading.timestamp,
-            style: .natural,
-            units: .second)
+        let timeDeltaProvider: CLKTextProvider
+        if dataModel.isCurrentReadingTooOld {
+            timeDeltaProvider = CLKSimpleTextProvider(text: "OLD")
+            timeDeltaProvider.tintColor = .red
+        } else {
+            timeDeltaProvider = CLKRelativeDateTextProvider(
+                date: dataModel.currentReading.timestamp,
+                style: .natural,
+                units: .second)
+        }
+        
         let timeProvider = CLKTimeTextProvider(date: dataModel.currentReading.timestamp)
         
         return CLKComplicationTemplateModularLargeStandardBody(
@@ -163,10 +176,17 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
     private func createUtilitarianLargeTemplate(_ dataModel: DexcomDataModelInterface) -> CLKComplicationTemplate {
         let glucoseProvider = CLKSimpleTextProvider(text: "\(dataModel.currentReadingValueString)")
         let glucoseTrendProvider = CLKSimpleTextProvider(text: "\(dataModel.currentReadingTrendSymbolString)")
-        let timeDeltaProvider = CLKRelativeDateTextProvider(
-            date: dataModel.currentReading.timestamp,
-            style: .natural,
-            units: .second)
+        
+        let timeDeltaProvider: CLKTextProvider
+        if dataModel.isCurrentReadingTooOld {
+            timeDeltaProvider = CLKSimpleTextProvider(text: "OLD")
+            timeDeltaProvider.tintColor = .red
+        } else {
+            timeDeltaProvider = CLKRelativeDateTextProvider(
+                date: dataModel.currentReading.timestamp,
+                style: .natural,
+                units: .second)
+        }
         
         let combinedProvider = CLKTextProvider(
             format: "%@ %@, %@",
@@ -196,10 +216,16 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             format: "%@ %@ %@",
             glucoseProvider, glucoseTrendProvider, glucoseDeltaProvider)
         
-        let timeDeltaProvider = CLKRelativeDateTextProvider(
-            date: dataModel.currentReading.timestamp,
-            style: .natural,
-            units: .second)
+        let timeDeltaProvider: CLKTextProvider
+        if dataModel.isCurrentReadingTooOld {
+            timeDeltaProvider = CLKSimpleTextProvider(text: "OLD")
+        } else {
+            timeDeltaProvider = CLKRelativeDateTextProvider(
+                date: dataModel.currentReading.timestamp,
+                style: .natural,
+                units: .second)
+        }
+        
         
         return CLKComplicationTemplateExtraLargeStackText(
             line1TextProvider: combinedGlucoseProvider,
@@ -222,10 +248,18 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             glucoseProvider, glucoseTrendProvider, glucoseDeltaProvider)
         
         let timeProvider = CLKTimeTextProvider(date: dataModel.currentReading.timestamp)
-        let timeDeltaProvider = CLKRelativeDateTextProvider(
-            date: dataModel.currentReading.timestamp,
-            style: .natural,
-            units: .second)
+        
+        let timeDeltaProvider: CLKTextProvider
+        if dataModel.isCurrentReadingTooOld {
+            timeDeltaProvider = CLKSimpleTextProvider(text: "OLD")
+            timeDeltaProvider.tintColor = .red
+        } else {
+            timeDeltaProvider = CLKRelativeDateTextProvider(
+                date: dataModel.currentReading.timestamp,
+                style: .natural,
+                units: .second)
+        }
+        
         let combinedTimeProfider = CLKTextProvider(format: "%@, %@", timeProvider, timeDeltaProvider)
         
         return CLKComplicationTemplateGraphicCornerStackText(
@@ -243,7 +277,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             gaugeColors: nil,
             gaugeColorLocations: nil,
             start: dataModel.currentReading.timestamp,
-            end: dataModel.currentReading.timestamp.addingTimeInterval(GGOptions.timeGuageEndMinutes))
+            end: dataModel.currentReading.timestamp.addingTimeInterval(GGOptions.readingOldnessInterval))
                                 
         return CLKComplicationTemplateGraphicCircularOpenGaugeSimpleText(
             gaugeProvider: gaugeProvider,
@@ -266,10 +300,16 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
         
         let timeProvider = CLKTimeTextProvider(date: dataModel.currentReading.timestamp)
         
-        let timeDeltaProvider = CLKRelativeDateTextProvider(
-            date: dataModel.currentReading.timestamp,
-            style: .natural,
-            units: .second)
+        let timeDeltaProvider: CLKTextProvider
+        if dataModel.isCurrentReadingTooOld {
+            timeDeltaProvider = CLKSimpleTextProvider(text: "OLD")
+            timeDeltaProvider.tintColor = .red
+        } else {
+            timeDeltaProvider = CLKRelativeDateTextProvider(
+                date: dataModel.currentReading.timestamp,
+                style: .natural,
+                units: .second)
+        }
         
         return CLKComplicationTemplateGraphicRectangularStandardBody(
             headerTextProvider: combinedGlucoseProvider,
@@ -290,10 +330,17 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             line1TextProvider: glucoseTrendProvider,
             line2TextProvider: combinedGlucoseProvider)
         
-        let timeDeltaProvider = CLKRelativeDateTextProvider(
-            date: dataModel.currentReading.timestamp,
-            style: .natural,
-            units: .second)
+        let timeDeltaProvider: CLKTextProvider
+        if dataModel.isCurrentReadingTooOld {
+            timeDeltaProvider = CLKSimpleTextProvider(text: "OLD")
+            timeDeltaProvider.tintColor = .red
+        } else {
+            timeDeltaProvider = CLKRelativeDateTextProvider(
+                date: dataModel.currentReading.timestamp,
+                style: .natural,
+                units: .second)
+        }
+        
         let timeProvider = CLKTimeTextProvider(date: dataModel.currentReading.timestamp)
         
         let combinedTimeProvider = CLKTextProvider(format: "%@, %@", timeProvider, timeDeltaProvider)
@@ -314,7 +361,7 @@ class ComplicationController: NSObject, CLKComplicationDataSource {
             gaugeColors: nil,
             gaugeColorLocations: nil,
             start: dataModel.currentReading.timestamp,
-            end: dataModel.currentReading.timestamp.addingTimeInterval(GGOptions.timeGuageEndMinutes))
+            end: dataModel.currentReading.timestamp.addingTimeInterval(GGOptions.readingOldnessInterval))
         
         return CLKComplicationTemplateGraphicExtraLargeCircularOpenGaugeSimpleText(
             gaugeProvider: gaugeProvider,
