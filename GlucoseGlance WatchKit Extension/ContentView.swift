@@ -33,7 +33,7 @@ struct ContentView: View {
                 case .active:
                     logger.debug("Scene became active.")
                     
-                    async {
+                    Task {
                         await dataModel.checkForNewReadings()
                     }
                     

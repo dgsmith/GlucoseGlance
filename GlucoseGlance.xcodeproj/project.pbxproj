@@ -11,6 +11,7 @@
 		563A50B9267C426E00FB8083 /* GlucoseReading.swift in Sources */ = {isa = PBXBuildFile; fileRef = 563A50B7267C426E00FB8083 /* GlucoseReading.swift */; };
 		563A50C3267C455500FB8083 /* DexcomProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 563A50C0267C455500FB8083 /* DexcomProvider.swift */; };
 		563A50C4267C455500FB8083 /* DexcomProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 563A50C0267C455500FB8083 /* DexcomProvider.swift */; };
+		5698B5202690FE6300A3615C /* Pallete+Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 5698B51F2690FE6300A3615C /* Pallete+Color.swift */; };
 		569A3DAF267E88AA00A68103 /* GGOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56A8C18326560ADE00E7C8C8 /* GGOptions.swift */; };
 		569A3DB0267E88AA00A68103 /* GGOptions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56A8C18326560ADE00E7C8C8 /* GGOptions.swift */; };
 		569A3DB1267E88AD00A68103 /* DexcomData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 56A8C1772656068300E7C8C8 /* DexcomData.swift */; };
@@ -105,6 +106,7 @@
 /* Begin PBXFileReference section */
 		563A50B7267C426E00FB8083 /* GlucoseReading.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = GlucoseReading.swift; sourceTree = "<group>"; };
 		563A50C0267C455500FB8083 /* DexcomProvider.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DexcomProvider.swift; sourceTree = "<group>"; };
+		5698B51F2690FE6300A3615C /* Pallete+Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Pallete+Color.swift"; sourceTree = "<group>"; };
 		569A3DAE267D558F00A68103 /* GlucoseGlance-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GlucoseGlance-Info.plist"; sourceTree = "<group>"; };
 		569A3DB5267E8FCA00A68103 /* MockDexcomProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MockDexcomProvider.swift; sourceTree = "<group>"; };
 		56A3DD102650651400C7A3E4 /* GlucoseGlance.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GlucoseGlance.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -192,15 +194,13 @@
 		56A3DD242650651800C7A3E4 /* GlucoseGlance WatchKit Extension */ = {
 			isa = PBXGroup;
 			children = (
+				56CDAB8D2687C88400AACA4E /* DexcomData */,
 				56A8C1752656068300E7C8C8 /* GlucoseGlanceApp.swift */,
 				56A8C17A2656068400E7C8C8 /* ContentView.swift */,
 				56A8C1782656068400E7C8C8 /* GlucoseReadingsView.swift */,
-				56A8C18326560ADE00E7C8C8 /* GGOptions.swift */,
-				56A8C1772656068300E7C8C8 /* DexcomData.swift */,
 				56A8C1762656068300E7C8C8 /* ComplicationController.swift */,
 				56A8C17B2656068400E7C8C8 /* ExtensionDelegate.swift */,
-				563A50B7267C426E00FB8083 /* GlucoseReading.swift */,
-				563A50C0267C455500FB8083 /* DexcomProvider.swift */,
+				5698B51F2690FE6300A3615C /* Pallete+Color.swift */,
 				56A3DD2F2650651900C7A3E4 /* Assets.xcassets */,
 				56A3DD342650651900C7A3E4 /* Info.plist */,
 				56A3DD312650651900C7A3E4 /* Preview Content */,
@@ -219,7 +219,6 @@
 		56A3DD3D2650651A00C7A3E4 /* GlucoseGlanceTests */ = {
 			isa = PBXGroup;
 			children = (
-				569A3DB5267E8FCA00A68103 /* MockDexcomProvider.swift */,
 				56A3DD3E2650651A00C7A3E4 /* GlucoseGlanceTests.swift */,
 				56A3DD402650651A00C7A3E4 /* Info.plist */,
 			);
@@ -240,6 +239,18 @@
 			children = (
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		56CDAB8D2687C88400AACA4E /* DexcomData */ = {
+			isa = PBXGroup;
+			children = (
+				56A8C18326560ADE00E7C8C8 /* GGOptions.swift */,
+				563A50B7267C426E00FB8083 /* GlucoseReading.swift */,
+				563A50C0267C455500FB8083 /* DexcomProvider.swift */,
+				569A3DB5267E8FCA00A68103 /* MockDexcomProvider.swift */,
+				56A8C1772656068300E7C8C8 /* DexcomData.swift */,
+			);
+			path = DexcomData;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -437,6 +448,7 @@
 				563A50C3267C455500FB8083 /* DexcomProvider.swift in Sources */,
 				56A8C17C2656068400E7C8C8 /* GlucoseGlanceApp.swift in Sources */,
 				56A8C17E2656068400E7C8C8 /* DexcomData.swift in Sources */,
+				5698B5202690FE6300A3615C /* Pallete+Color.swift in Sources */,
 				56A8C17D2656068400E7C8C8 /* ComplicationController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -15,7 +15,7 @@ public enum ShareError: Error {
     // SSO_AuthenticatePasswordInvalid
     // SSO_AuthenticateMaxAttemptsExceeed
     case loginError(errorCode: String)
-    case fetchError
+    case fetchError(reason: String)
     case dataError(reason: String)
     case dateError
 }
@@ -29,8 +29,8 @@ extension ShareError: CustomStringConvertible {
         case .loginError(let errorCode):
             return "Login Error: \(errorCode)"
             
-        case .fetchError:
-            return "Fetch Error"
+        case .fetchError(let reason):
+            return "Fetch Error, Reason: \(reason)"
             
         case .dataError(let reason):
             return "Data Error, Reason: \(reason)"
@@ -57,6 +57,7 @@ private let maxReauthAttempts = 2
 protocol DexcomProvidable {
     func authenticate() async throws
     func fetchLatestReadings(_ numReadings: Int) async throws -> [GlucoseReading]
+    func invalidateSession() async
 }
 
 actor DexcomProvider: DexcomProvidable {
@@ -72,11 +73,11 @@ actor DexcomProvider: DexcomProvidable {
     
     private var lastFetchedReadings: [GlucoseReading] = []
     private var lastFetch: Date = Date.distantPast
-    private let allowedFetchInterval: TimeInterval = GGOptions.dexcomFetchLimit
+    private let allowedFetchInterval: TimeInterval = GGOptions.shared.dexcomFetchLimit
     
-    public static let shared = DexcomProvider(username: GGOptions.username,
-                                              password: GGOptions.password,
-                                              shareServer: GGOptions.dexcomServer)
+    public static let shared = DexcomProvider(username: GGOptions.shared.username,
+                                              password: GGOptions.shared.password,
+                                              shareServer: GGOptions.shared.dexcomServer)
     
     public init(username: String, password: String, shareServer: KnownShareServer) {
         self.username = username
@@ -85,14 +86,13 @@ actor DexcomProvider: DexcomProvidable {
     }
 
     public func fetchLatestReadings(_ numReadings: Int) async throws -> [GlucoseReading] {
-        logger.log("Fetching latest (\(numReadings)) readings...")
+        logger.debug("Fetching latest (\(numReadings, privacy: .public)) readings...")
         
         let now = Date()
         let timeSinceLastFetch = lastFetch.distance(to: now)
-        guard timeSinceLastFetch > allowedFetchInterval else {
-            logger.log("Last fetch too recent (\(timeSinceLastFetch))")
-            return lastFetchedReadings
-        }
+        let sleeping = UInt32(max(allowedFetchInterval - timeSinceLastFetch, 0))
+        logger.debug("Sleeping \(sleeping, privacy: .public)")
+        sleep(sleeping)
         
         lastFetch = now
         
@@ -101,7 +101,7 @@ actor DexcomProvider: DexcomProvidable {
         }
 
         guard var components = URLComponents(string: shareServer.rawValue + dexcomLatestGlucosePath) else {
-            throw ShareError.fetchError
+            throw ShareError.fetchError(reason: "Fetch components construction fail")
         }
 
         components.queryItems = [
@@ -111,7 +111,7 @@ actor DexcomProvider: DexcomProvidable {
         ]
 
         guard let url = components.url else {
-            throw ShareError.fetchError
+            throw ShareError.fetchError(reason: "Fetch URL construction fail")
         }
 
         var request = URLRequest(url: url)
@@ -120,7 +120,13 @@ actor DexcomProvider: DexcomProvidable {
         request.addValue("application/json", forHTTPHeaderField: "Accept")
         request.addValue(dexcomUserAgent, forHTTPHeaderField: "User-Agent")
 
-        let (data, _) = try await URLSession.shared.data(for: request, delegate: nil)
+        let (data, response) = try await URLSession.shared.data(for: request)
+        guard let response = response as? HTTPURLResponse else {
+            throw ShareError.fetchError(reason: "Fetch Request Failed")
+        }
+        guard response.statusCode == 200 else {
+            throw ShareError.fetchError(reason: "\(response.statusCode)")
+        }
         
         let decoder = JSONDecoder()
         let decoded = try decoder.decode([GlucoseReading].self, from: data)
@@ -130,7 +136,7 @@ actor DexcomProvider: DexcomProvidable {
     }
 
     public func authenticate() async throws {
-        logger.log("Authenticating...")
+        logger.debug("Authenticating...")
         
         let uploadData = [
             "accountName": username,
@@ -138,12 +144,12 @@ actor DexcomProvider: DexcomProvidable {
             "applicationId": dexcomApplicationId
         ]
 
-        guard let encodedData = try? JSONSerialization.data(withJSONObject: uploadData, options:[]) else {
-            throw ShareError.dataError(reason: "Failed to encode JSON for POST")
+        guard let encodedData = try? JSONSerialization.data(withJSONObject: uploadData) else {
+            throw ShareError.dataError(reason: "Auth Data Encode Failed")
         }
 
         guard let url = URL(string: shareServer.rawValue + dexcomLoginPath) else {
-            throw ShareError.fetchError
+            throw ShareError.fetchError(reason: "Auth URL construction fail")
         }
 
         var request = URLRequest(url: url)
@@ -153,13 +159,31 @@ actor DexcomProvider: DexcomProvidable {
         request.addValue(dexcomUserAgent, forHTTPHeaderField: "User-Agent")
         request.httpBody = encodedData
 
-        let (data, _) = try await URLSession.shared.data(for: request, delegate: nil)
-        let decoded = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
+        let (data, response) = try await URLSession.shared.data(for: request)
+        guard let response = response as? HTTPURLResponse else {
+            throw ShareError.loginError(errorCode: "Auth Request Failed")
+        }
+        guard response.statusCode == 200 else {
+            throw ShareError.loginError(errorCode: "\(response.statusCode)")
+        }
+        
+        let decoded: Any
+        do {
+            decoded = try JSONSerialization.jsonObject(with: data, options: .allowFragments)
+        } catch {
+            throw ShareError.loginError(errorCode: "Auth Decode Failed: \(error.localizedDescription)")
+        }
 
         guard let token = decoded as? String else {
-            throw ShareError.loginError(errorCode: "unknown")
+            throw ShareError.loginError(errorCode: "Auth Parse Failed")
         }
 
         self.token = token
+    }
+    
+    public func invalidateSession() async {
+        token = nil
+        lastFetch = Date.distantPast
+        lastFetchedReadings = []
     }
 }

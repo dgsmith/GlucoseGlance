@@ -32,7 +32,7 @@ class ExtensionDelegate: NSObject, WKExtensionDelegate {
                 // Check for updates from Dexcom.
                 let model = DexcomData.shared
                 
-                async {
+                Task {
                     let success = await model.checkForNewReadings()
                     
                     if success {
