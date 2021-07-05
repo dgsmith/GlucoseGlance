@@ -6,6 +6,7 @@ A delegate object for the WatchKit extension that implements the needed life cyc
 */
 
 import WatchKit
+import SwiftCom
 import os
 
 // The app's extension delegate.

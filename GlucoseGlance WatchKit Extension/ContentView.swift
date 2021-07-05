@@ -6,6 +6,7 @@ A wrapper view that instantiates the glucose readings view and the data for the 
 */
 
 import SwiftUI
+import SwiftCom
 import os
 
 // A wrapper view that simplifies adding the main view to the hosting controller.

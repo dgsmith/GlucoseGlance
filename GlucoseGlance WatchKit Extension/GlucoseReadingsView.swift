@@ -7,6 +7,7 @@ refresh the data.
 */
 
 import SwiftUI
+import SwiftCom
 
 // The Glucose Glance app's main view.
 struct GlucoseReadingsView: View {
@@ -59,7 +60,7 @@ struct GlucoseReadingsView: View {
                         if dataModel.isCurrentReadingTooOld {
                             Text("OLD")
                                 .font(.footnote.bold())
-                                .foregroundColor(options.theme.aboveRange)
+                                .foregroundColor(options.theme.belowRange)
                                 .accessibilityIdentifier("isCurrentReadingTooOld")
                         } else {
                             Text(dataModel.currentReading.timestamp, style: .relative)
@@ -199,18 +200,15 @@ struct ThemeView: View {
 struct GlucoseReadingsView_Previews: PreviewProvider {
     static var previews: some View {
         Group {
-//            GlucoseReadingsView()
-//                .environmentObject(DexcomData.shared)
-//                .previewDevice("Apple Watch Series 6 - 44mm")
-//            GlucoseReadingsView()
-//                .environmentObject(DexcomData.shared)
-//                .previewDevice("Apple Watch Series 6 - 40mm")
+            GlucoseReadingsView()
+                .environmentObject(DexcomData.shared)
+                .previewDevice("Apple Watch Series 6 - 44mm")
+            GlucoseReadingsView()
+                .environmentObject(DexcomData.shared)
+                .previewDevice("Apple Watch Series 6 - 40mm")
             
             OptionsSheetView()
                 .previewDevice("Apple Watch Series 6 - 40mm")
-            
-            ThemeView(theme: ColorThemePlain(), isSelected: true)
-                .previewLayout(.fixed(width: 150, height: 61.5))
         }
     }
 }

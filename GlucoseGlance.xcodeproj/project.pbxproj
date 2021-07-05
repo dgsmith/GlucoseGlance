@@ -3,10 +3,11 @@
 	archiveVersion = 1;
 	classes = {
 	};
-	objectVersion = 50;
+	objectVersion = 52;
 	objects = {
 
 /* Begin PBXBuildFile section */
+		567B0B662692853C00911E5B /* SwiftCom in Frameworks */ = {isa = PBXBuildFile; productRef = 567B0B652692853C00911E5B /* SwiftCom */; };
 		56A3DD152650651400C7A3E4 /* GlucoseGlance WatchKit App.app in Embed Watch Content */ = {isa = PBXBuildFile; fileRef = 56A3DD142650651400C7A3E4 /* GlucoseGlance WatchKit App.app */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		56A3DD1A2650651800C7A3E4 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 56A3DD192650651800C7A3E4 /* Assets.xcassets */; };
 		56A3DD212650651800C7A3E4 /* GlucoseGlance WatchKit Extension.appex in Embed App Extensions */ = {isa = PBXBuildFile; fileRef = 56A3DD202650651800C7A3E4 /* GlucoseGlance WatchKit Extension.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
@@ -80,6 +81,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		567B0B642692852500911E5B /* SwiftCom */ = {isa = PBXFileReference; lastKnownFileType = folder; name = SwiftCom; path = ../SwiftCom; sourceTree = "<group>"; };
 		569A3DAE267D558F00A68103 /* GlucoseGlance-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "GlucoseGlance-Info.plist"; sourceTree = "<group>"; };
 		56A3DD102650651400C7A3E4 /* GlucoseGlance.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GlucoseGlance.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		56A3DD142650651400C7A3E4 /* GlucoseGlance WatchKit App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "GlucoseGlance WatchKit App.app"; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -104,6 +106,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				567B0B662692853C00911E5B /* SwiftCom in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -120,6 +123,7 @@
 		5698B523269280CA00A3615C /* Packages */ = {
 			isa = PBXGroup;
 			children = (
+				567B0B642692852500911E5B /* SwiftCom */,
 			);
 			name = Packages;
 			sourceTree = "<group>";
@@ -247,6 +251,9 @@
 			dependencies = (
 			);
 			name = "GlucoseGlance WatchKit Extension";
+			packageProductDependencies = (
+				567B0B652692853C00911E5B /* SwiftCom */,
+			);
 			productName = "GlucoseGlance WatchKit Extension";
 			productReference = 56A3DD202650651800C7A3E4 /* GlucoseGlance WatchKit Extension.appex */;
 			productType = "com.apple.product-type.watchkit2-extension";
@@ -721,6 +728,13 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		567B0B652692853C00911E5B /* SwiftCom */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = SwiftCom;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = 56A3DD0A2650651400C7A3E4 /* Project object */;
 }

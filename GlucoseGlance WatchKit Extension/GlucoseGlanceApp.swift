@@ -6,6 +6,7 @@ The entry point for the Glucose Glance app.
 */
 
 import SwiftUI
+import SwiftCom
 
 @main
 struct GlucoseGlanceApp: App {

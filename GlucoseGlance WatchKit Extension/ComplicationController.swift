@@ -6,6 +6,7 @@ A controller that configures and updates the complications.
 */
 
 import ClockKit
+import SwiftCom
 
 class ComplicationController: NSObject, CLKComplicationDataSource {
     
